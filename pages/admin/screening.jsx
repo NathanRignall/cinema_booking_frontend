@@ -7,18 +7,21 @@ import { ErrorDisplayer } from "../../components/widgets/basic";
 
 import { Card, Spinner, Alert } from "react-bootstrap";
 
-// movie Card
-const Movie = (props) => {
+// screening Card
+const Screening = (props) => {
   return (
     <>
       <Card>
         <Card.Header className="bg-secondary text-white">
-          <h4 className="d-inline">{props.info.title}</h4>
+          <h4 className="d-inline">{props.info.time}</h4>
         </Card.Header>
 
         <Card.Body>
-          {props.info.id}
+          {props.info.movie.title}
           <br />
+          {props.info.screen.name}
+          <br />
+          {props.info.id}
         </Card.Body>
       </Card>
       <br />
@@ -27,15 +30,15 @@ const Movie = (props) => {
 };
 
 // main list loader
-const MovieList = (props) => {
+const ScreeningList = (props) => {
   const { data, error } = useSWR(
-    process.env.NEXT_PUBLIC_API_URL + "/admin/movie",
+    process.env.NEXT_PUBLIC_API_URL + "/admin/screening",
     fetcher
   );
 
   if (data) {
     const FormedList = data.payload.map((item) => (
-      <Movie key={item.id} info={item} />
+      <Screening key={item.id} info={item} />
     ));
 
     return (
@@ -69,11 +72,11 @@ export default function Main() {
   return (
     <Layout title="Admin Movies" access={0}>
       <div className="d-flex">
-        <h1>Movie List</h1>
+        <h1>Screening List</h1>
       </div>
 
       <br />
-      <MovieList />
+      <ScreeningList />
     </Layout>
   );
 }

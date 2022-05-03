@@ -7,18 +7,23 @@ import { ErrorDisplayer } from "../../components/widgets/basic";
 
 import { Card, Spinner, Alert } from "react-bootstrap";
 
-// movie Card
-const Movie = (props) => {
+// reservation Card
+const Reservation = (props) => {
+  const FormedList = props.info.seats.map((item) => (
+    <div key={item.id}>{item.id}</div>
+  ));
+
   return (
     <>
       <Card>
         <Card.Header className="bg-secondary text-white">
-          <h4 className="d-inline">{props.info.title}</h4>
+          <h4 className="d-inline">{props.info.id}</h4>
         </Card.Header>
 
         <Card.Body>
-          {props.info.id}
-          <br />
+          {props.info.time}
+
+          {FormedList}
         </Card.Body>
       </Card>
       <br />
@@ -27,15 +32,15 @@ const Movie = (props) => {
 };
 
 // main list loader
-const MovieList = (props) => {
+const ReservationList = (props) => {
   const { data, error } = useSWR(
-    process.env.NEXT_PUBLIC_API_URL + "/admin/movie",
+    process.env.NEXT_PUBLIC_API_URL + "/admin/reservation",
     fetcher
   );
 
   if (data) {
     const FormedList = data.payload.map((item) => (
-      <Movie key={item.id} info={item} />
+      <Reservation key={item.id} info={item} />
     ));
 
     return (
@@ -69,11 +74,11 @@ export default function Main() {
   return (
     <Layout title="Admin Movies" access={0}>
       <div className="d-flex">
-        <h1>Movie List</h1>
+        <h1>Reservation List</h1>
       </div>
 
       <br />
-      <MovieList />
+      <ReservationList />
     </Layout>
   );
 }
