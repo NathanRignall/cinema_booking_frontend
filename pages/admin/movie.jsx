@@ -4,8 +4,13 @@ import useSWR from "swr";
 
 import { fetcher } from "../../components/common/functions";
 import { ErrorDisplayer } from "../../components/widgets/basic";
+import { Delete } from "../../components/widgets/managers/shared";
+import { MovieCreateModal } from "../../components/widgets/managers/movie";
 
 import { Card, Spinner, Alert } from "react-bootstrap";
+
+// axios request urls
+const MOVIE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/movie";
 
 // movie Card
 const Movie = (props) => {
@@ -17,8 +22,12 @@ const Movie = (props) => {
         </Card.Header>
 
         <Card.Body>
-          {props.info.id}
+          duration - {props.info.duration}
           <br />
+          id - {props.info.id}
+          <br />
+
+          <Delete url={`${MOVIE_URI}/${props.info.id}`} mutate_url={MOVIE_URI} type="Movie" name={props.info.title}/>
         </Card.Body>
       </Card>
       <br />
@@ -28,11 +37,9 @@ const Movie = (props) => {
 
 // main list loader
 const MovieList = (props) => {
-  const { data, error } = useSWR(
-    process.env.NEXT_PUBLIC_API_URL + "/admin/movie",
-    fetcher
-  );
+  const { data, error } = useSWR(MOVIE_URI, fetcher);
 
+  // check if data has loaded yet
   if (data) {
     const FormedList = data.payload.map((item) => (
       <Movie key={item.id} info={item} />
@@ -69,7 +76,11 @@ export default function Main() {
   return (
     <Layout title="Admin Movies" access={0}>
       <div className="d-flex">
-        <h1>Movie List</h1>
+        <h1>Movie Lists</h1>
+
+        <div className="ml-auto my-auto">
+          <MovieCreateModal />
+        </div>
       </div>
 
       <br />

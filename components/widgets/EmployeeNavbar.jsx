@@ -38,24 +38,6 @@ export default function EmployeeNavbar(props) {
             <Nav.Link href="/admin/reservation">Reservation</Nav.Link>
           </Link>
         </Nav>
-
-        <Nav>
-          <Dropdown>
-            <Dropdown.Toggle variant="outline-light" id="dropdown-basic" block>
-              User Account
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu align="right" className="text-center">
-              <Dropdown.Header className="pb-0 pt-1">Employee</Dropdown.Header>
-
-              <Dropdown.Divider />
-
-              <Link href="/employee/logout">
-                <Dropdown.Item href="/employee/logout">Logout</Dropdown.Item>
-              </Link>
-            </Dropdown.Menu>
-          </Dropdown>
-        </Nav>
       </Navbar.Collapse>
     </Navbar>
   );

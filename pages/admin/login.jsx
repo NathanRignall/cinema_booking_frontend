@@ -14,7 +14,6 @@ export default function Main() {
         <p>Please fill in your credentials to login.</p>
 
         {/* Load the form component */}
-
         <LoginForm employee={true} />
 
       </Container>

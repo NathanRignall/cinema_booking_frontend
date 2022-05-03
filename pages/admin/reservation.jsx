@@ -38,6 +38,7 @@ const ReservationList = (props) => {
     fetcher
   );
 
+  // check if data has loaded yet
   if (data) {
     const FormedList = data.payload.map((item) => (
       <Reservation key={item.id} info={item} />

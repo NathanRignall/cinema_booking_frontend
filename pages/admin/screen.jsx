@@ -4,6 +4,7 @@ import useSWR from "swr";
 
 import { fetcher } from "../../components/common/functions";
 import { ErrorDisplayer } from "../../components/widgets/basic";
+import { ScreenCreateModal } from "../../components/widgets/managers/screen";
 
 import { Card, Spinner, Alert } from "react-bootstrap";
 
@@ -17,7 +18,9 @@ const Screen = (props) => {
         </Card.Header>
 
         <Card.Body>
-          {props.info.id}
+          total setas - {props.info.totalSeats}
+          <br />
+          id - {props.info.id}
           <br />
         </Card.Body>
       </Card>
@@ -33,6 +36,7 @@ const ScreenList = (props) => {
     fetcher
   );
 
+  // check if data has loaded yet
   if (data) {
     const FormedList = data.payload.map((item) => (
       <Screen key={item.id} info={item} />
@@ -70,6 +74,10 @@ export default function Main() {
     <Layout title="Admin Screens" access={0}>
       <div className="d-flex">
         <h1>Screen List</h1>
+
+        <div className="ml-auto my-auto">
+          <ScreenCreateModal />
+        </div>
       </div>
 
       <br />
