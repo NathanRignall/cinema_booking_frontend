@@ -1,11 +1,12 @@
-import Layout from "../../components/layouts/default";
+import Layout from "../../../components/layouts/default";
 
+import Link from 'next/link'
 import useSWR from "swr";
 
-import { fetcher } from "../../components/common/functions";
-import { ErrorDisplayer } from "../../components/widgets/basic";
-import { Delete } from "../../components/widgets/managers/shared";
-import { ScreeningCreateModal } from "../../components/widgets/managers/screening";
+import { fetcher } from "../../../components/common/functions";
+import { ErrorDisplayer } from "../../../components/widgets/basic";
+import { Delete } from "../../../components/widgets/managers/shared";
+import { ScreeningCreateModal } from "../../../components/widgets/managers/screening";
 
 import { Card, Spinner, Alert } from "react-bootstrap";
 
@@ -18,7 +19,9 @@ const Screening = (props) => {
     <>
       <Card>
         <Card.Header className="bg-secondary text-white">
-          <h4 className="d-inline">{props.info.time}</h4>
+          <Link href={`/admin/screening/${props.info.id}`}>
+            <h4 className="d-inline">{props.info.time}</h4>
+          </Link>
         </Card.Header>
 
         <Card.Body>
