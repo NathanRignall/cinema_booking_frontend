@@ -11,15 +11,15 @@ export default function EmployeeNavbar(props) {
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Link href="/">
-        <Navbar.Brand>Employee Admin</Navbar.Brand>
+        <Navbar.Brand>XL Cinima</Navbar.Brand>
       </Link>
 
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
 
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
-          <Link href="/employee">
-            <Nav.Link href="/">Employee</Nav.Link>
+          <Link href="/admin">
+            <Nav.Link href="/">Admin</Nav.Link>
           </Link>
 
           <Link href="/admin/movie">
@@ -32,10 +32,6 @@ export default function EmployeeNavbar(props) {
 
           <Link href="/admin/screening">
             <Nav.Link href="/admin/screening">Screening</Nav.Link>
-          </Link>
-
-          <Link href="/admin/reservation">
-            <Nav.Link href="/admin/reservation">Reservation</Nav.Link>
           </Link>
         </Nav>
       </Navbar.Collapse>

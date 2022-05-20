@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from "next/link";
 
 import Button from 'react-bootstrap/Button';
 
@@ -11,7 +12,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Button>Test</Button>
+      <Link href="/admin/movie">
+            Admin
+          </Link>
+
     </div>
   )
 }
