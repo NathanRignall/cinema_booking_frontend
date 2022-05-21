@@ -170,11 +170,11 @@ const DateSelector = ({ ...props }) => {
   const [field] = useField(props);
 
   // custom button to control date picker
-  const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
-    <Button variant="light" type="button" onClick={onClick} ref={ref}>
-      {value ? value : "Set Date and Time"}
-    </Button>
-  ));
+  // const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
+  //   <Button variant="light" type="button" onClick={onClick} ref={ref}>
+  //     {value ? value : "Set Date and Time"}
+  //   </Button>
+  // ));
 
   return (
     <DatePicker
@@ -184,7 +184,7 @@ const DateSelector = ({ ...props }) => {
       dateFormat="MM/dd/yyyy HH:mm:ss"
       showTimeInput
       todayButton="Today"
-      customInput={<ExampleCustomInput />}
+      // customInput={<ExampleCustomInput />}
       onChange={(val) => {
         setFieldValue(field.name, val);
       }}
