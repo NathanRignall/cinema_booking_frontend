@@ -1,6 +1,6 @@
 import Layout from "../../../components/layouts/default";
 
-import Link from 'next/link'
+import Link from "next/link";
 import useSWR from "swr";
 
 import { fetcher } from "../../../components/common/functions";
@@ -62,7 +62,7 @@ const ScreeningList = (props) => {
           FormedList
         ) : (
           <Alert variant="warning">
-            There are currently 0 xxx in the system.
+            There are currently 0 screenings in the system.
           </Alert>
         )}
       </>
@@ -84,9 +84,9 @@ const ScreeningList = (props) => {
 export default function Main() {
   return (
     <Layout title="Admin Movies" access={0}>
-      <div className="d-flex">
-        <h1>Screening List</h1>
+      <h1 className="pt-4 mb-2 border-bottom">Screening</h1>
 
+      <div className="d-flex">
         <div className="ml-auto my-auto">
           <ScreeningCreateModal />
         </div>

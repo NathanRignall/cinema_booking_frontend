@@ -1,11 +1,15 @@
 import { useState, useEffect, forwardRef } from "react";
 import { mutate } from "swr";
+import { useRouter } from 'next/router'
 import axios from "axios";
 
 import { Button, Modal, Alert } from "react-bootstrap";
 
 // full delete modal
 export function Delete(props) {
+    // router for redirect
+    const router = useRouter()
+
     // contain the state of the modal
     const [show, setShow] = useState(false);
 
@@ -40,6 +44,10 @@ export function Delete(props) {
                 mutate(props.mutate_url);
                 // close the modal
                 handleClose();
+                // redirect user if needed
+                if(props.redirect) {
+                    router.push(props.redirect)
+                }
             })
             .catch(function (error) {
                 // catch each type of axios error

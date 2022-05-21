@@ -9,7 +9,7 @@ import { ErrorDisplayer } from "../../../components/widgets/basic";
 import { Delete } from "../../../components/widgets/managers/shared";
 import CinemaLayout from "../../../components/widgets/CinemaLayout";
 
-import { Card, Spinner, Alert } from "react-bootstrap";
+import { Card, Spinner, Button } from "react-bootstrap";
 
 // axios request urls
 const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screening";
@@ -37,8 +37,9 @@ const ScreeningCard = (props) => {
             name={props.info.movie.title}
           />
 
-          <br /><br />
-          <CinemaLayout {...props.info.screen} edit={false} selectable={true}/>
+          <br />
+          <br />
+          <CinemaLayout {...props.info.screen} edit={false} selectable={true} />
         </Card.Body>
       </Card>
       <br />
@@ -56,7 +57,30 @@ const Screening = (props) => {
       <>
         <ErrorDisplayer error={error} />
 
-        <ScreeningCard info={data.payload} />
+        <h1 className="pt-4 mb-2 border-bottom">
+          {data.payload.movie.title}
+
+          <p className="lead mb-2">
+            {data.payload.screen.name} - {data.payload.time}
+          </p>
+
+        </h1>
+
+        <div>
+          <Button variant="warning" className="me-2">
+            Edit Screening
+          </Button>
+
+          <Delete
+            url={`${SCREENING_URI}/${data.payload.id}`}
+            mutate_url={SCREENING_URI}
+            type="Screening"
+            name={data.payload.movie.title}
+            redirect={"/admin/screening"}
+          />
+        </div>
+
+        <CinemaLayout {...data.payload.screen} edit={false} selectable={true} purchase={true}/>
       </>
     );
   } else {
@@ -79,7 +103,7 @@ export default function Main() {
 
   return (
     <Layout title="Admin Movies ID">
-      {id != undefined ? <Screening id={id} /> : null}
+      {id != undefined ? <Screening id={id} router={router} /> : null}
     </Layout>
   );
 }

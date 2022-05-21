@@ -5,7 +5,7 @@ import axios from "axios";
 import RGL, { WidthProvider } from "react-grid-layout";
 import _ from "lodash";
 
-import { Card } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
 
 // axios request urls
 const SCREEN_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screen";
@@ -75,11 +75,18 @@ export default class CinemaLayout extends React.PureComponent {
         onClick={
           this.props.selectable ? this.selectSeat.bind(this, item.id) : null
         }
-        className={item.selected ? "border border-primary border-4" : null}
+        className={`${
+          item.selected ? "border border-primary border-4" : null
+        } ${
+          item.occupied ? "opacity-25" : null
+        } d-flex justify-content-center`}
       >
-        {item.name}
-        <br />
-        {item.occupied ? "occupied" : null}
+        
+          <div className="align-self-center text-bold">
+          <b>{item.name}</b>
+          </div>
+
+        
       </div>
     );
   }
@@ -181,11 +188,15 @@ export default class CinemaLayout extends React.PureComponent {
 
   selectSeat(seatId) {
     this.setState((state) => {
+      const selected = [];
+
       const items = state.items.map((item) => {
         if (item.id == seatId) {
           let newItem = item;
 
           if (!newItem.selected & !newItem.occupied) {
+            selected.push(seatId);
+
             newItem.selected = true;
             return newItem;
           } else {
@@ -193,24 +204,35 @@ export default class CinemaLayout extends React.PureComponent {
             return newItem;
           }
         } else {
+          if (item.selected == true) {
+            selected.push(seatId);
+          }
           return item;
         }
       });
 
       return {
         items,
+        selected,
       };
     });
   }
 
   render() {
     return (
-      <div>
-        <Card
-          bg={"dark"}
-          text={"white"}
-          className="mb-5"
-        >
+      <div className="mt-2">
+        {this.props.purchase ? (
+          <div className="d-flex pb-2 flex-row-reverse">
+            <Button
+              disabled={this.state.selected.length == 0}
+              classvariant="primary"
+            >
+              Reserve Selected
+            </Button>
+          </div>
+        ) : null}
+
+        <Card bg={"dark"} text={"white"} className="mb-5">
           <Card.Header className="text-center">Screen</Card.Header>
         </Card>
 
