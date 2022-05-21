@@ -1,11 +1,13 @@
 import Layout from "../../../components/layouts/default";
 
-import { useRouter } from 'next/router'
-import useSWR from "swr";
+import React from "react";
+import { useRouter } from "next/router";
+import useSWR, { mutate } from "swr";
 
 import { fetcher } from "../../../components/common/functions";
 import { ErrorDisplayer } from "../../../components/widgets/basic";
 import { Delete } from "../../../components/widgets/managers/shared";
+import CinemaLayout from "../../../components/widgets/CinemaLayout";
 
 import { Card, Spinner, Alert } from "react-bootstrap";
 
@@ -34,6 +36,9 @@ const ScreeningCard = (props) => {
             type="Screening"
             name={props.info.movie.title}
           />
+
+          <br /><br />
+          <CinemaLayout {...props.info.screen} edit={false} selectable={true}/>
         </Card.Body>
       </Card>
       <br />
