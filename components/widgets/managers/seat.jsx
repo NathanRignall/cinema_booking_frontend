@@ -3,26 +3,24 @@ import { mutate } from "swr";
 
 import { Formik, useField, useFormikContext } from "formik";
 import * as yup from "yup";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
 import axios from "axios";
 
 import { Form, Button, Spinner, Modal, Alert } from "react-bootstrap";
 
 // axios request urls
-const MOVIE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/movie";
+const SEAT_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/seat";
 const SCREEN_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screen";
-const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screening";
+const TYPE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/type";
 
-// form schema
+// form schemas
 const schemaCreate = yup.object().shape({
-  movieId: yup.string().required(),
-  screenId: yup.string().required(),
+  typeId: yup.string().required(),
+  rows: yup.number().required().positive().integer(),
 });
 
-// movie selector component
-const MovieSelector = (props) => {
+// type selector component
+const TypeSelector = (props) => {
   // send details back to formik
   const { setFieldValue } = useFormikContext();
 
@@ -42,77 +40,7 @@ const MovieSelector = (props) => {
   const handleSearch = (query) => {
     // make the axios request for search
     axios
-      .get(`${MOVIE_URI}/find?find=${query}`)
-      .then((response) => {
-        // put the response into array
-        const options = response.data.payload.map((items) => ({
-          title: items.title,
-          id: items.id,
-        }));
-        // set the options state to this new array
-        setOptions(options);
-      })
-      .catch((error) => {
-        // catch each type of axios error
-        if (error.response) {
-          if (error.response.status == 400) {
-            console.log("No results in search");
-          } else {
-            console.log("Error with response in search");
-          }
-        } else if (error.request) {
-          console.log("No response in search");
-        } else {
-          console.log("Axios error in search");
-        }
-        // set options to itself
-        setOptions(options);
-      });
-  };
-
-  const filterBy = () => true;
-
-  return (
-    <AsyncTypeahead
-      id={props.name}
-      name={props.name}
-      multiple={false}
-      filterBy={filterBy}
-      isLoading={isLoading}
-      labelKey="title"
-      minLength={2}
-      onSearch={handleSearch}
-      options={options}
-      onChange={setSingleSelections}
-      selected={singleSelections}
-      placeholder="Enter Movie Name..."
-      renderMenuItemChildren={(option, props) => <span>{option.title}</span>}
-    />
-  );
-};
-
-// screen selector component
-const ScreenSelector = (props) => {
-  // send details back to formik
-  const { setFieldValue } = useFormikContext();
-
-  // hold the current status
-  const [isLoading, setIsLoading] = useState(false);
-  const [options, setOptions] = useState([]);
-  const [singleSelections, setSingleSelections] = useState([]);
-
-  // if a single item is selected set the formik status
-  useEffect(() => {
-    if (singleSelections.length > 0) {
-      setFieldValue(props.name, singleSelections[0].id);
-    }
-  }, [singleSelections]);
-
-  // main feild searcher
-  const handleSearch = (query) => {
-    // make the axios request for search
-    axios
-      .get(`${SCREEN_URI}/find?find=${query}`)
+      .get(`${TYPE_URI}/find?find=${query}`)
       .then((response) => {
         // put the response into array
         const options = response.data.payload.map((items) => ({
@@ -155,45 +83,14 @@ const ScreenSelector = (props) => {
       options={options}
       onChange={setSingleSelections}
       selected={singleSelections}
-      placeholder="Enter Screen Name..."
+      placeholder="Enter Seat Type Name..."
       renderMenuItemChildren={(option, props) => <span>{option.name}</span>}
     />
   );
 };
 
-// date selector
-const DateSelector = ({ ...props }) => {
-  // send details back to formik
-  const { setFieldValue } = useFormikContext();
-
-  // hold the current status
-  const [field] = useField(props);
-
-  // custom button to control date picker
-  // const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
-  //   <Button variant="light" type="button" onClick={onClick} ref={ref}>
-  //     {value ? value : "Set Date and Time"}
-  //   </Button>
-  // ));
-
-  return (
-    <DatePicker
-      {...field}
-      {...props}
-      selected={field.value}
-      dateFormat="MM/dd/yyyy HH:mm:ss"
-      showTimeInput
-      todayButton="Today"
-      // customInput={<ExampleCustomInput />}
-      onChange={(val) => {
-        setFieldValue(field.name, val);
-      }}
-    />
-  );
-};
-
-// full screening cue modal
-export const ScreeningCreateModal = (props) => {
+// full create bulk seats modal
+export const SeatBulkCreateModal = (props) => {
   // contain the state of the modal
   const [show, setShow] = useState(false);
 
@@ -215,19 +112,17 @@ export const ScreeningCreateModal = (props) => {
 
   // handle a from submit to create
   const handleOnSubmit = (values, actions) => {
-    console.log("go!");
-
     // create the json object to post
     const json = {
-      time: values.time,
-      price: 200,
-      movieId: values.movieId,
-      screenId: values.screenId,
+      screenId: props.screen.id,
+      typeId: values.typeId,
+      rows: values.rows,
+      columns: props.screen.columns,
     };
 
     // axios post create
     axios
-      .post(SCREENING_URI, json, {
+      .post(`${SEAT_URI}/bulk`, json, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
       })
@@ -236,8 +131,8 @@ export const ScreeningCreateModal = (props) => {
         actions.setSubmitting(false);
         // set the server state to handle errors
         handleServerResponse(false, false, response.data.message);
-        // reload the screening list
-        mutate(SCREENING_URI);
+        // reload the screen
+        mutate(`${SCREEN_URI}/${props.screen.id}`);
         // close the modal
         handleClose();
       })
@@ -274,7 +169,7 @@ export const ScreeningCreateModal = (props) => {
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        Create Screening
+        Bulk Add Seats
       </Button>
 
       <Modal
@@ -288,43 +183,41 @@ export const ScreeningCreateModal = (props) => {
         <Formik
           validationSchema={schemaCreate}
           initialValues={{
-            price: 0,
-            moveId: "",
-            screenId: "",
-            time: new Date(),
+            typeId: "",
+            rows: 0,
           }}
           onSubmit={handleOnSubmit}
         >
           {({ handleSubmit, handleChange, values, errors, isSubmitting }) => (
             <Form noValidate onSubmit={handleSubmit}>
               <Modal.Header className="bg-success text-white">
-                <Modal.Title>Create Screening</Modal.Title>
+                <Modal.Title>Create Screen</Modal.Title>
               </Modal.Header>
 
               <Modal.Body>
-                {/* movie selector */}
+                {/* type selector */}
                 <Form.Group controlId="validationFormik01">
-                  <MovieSelector name="movieId" />
-                  
+                  <TypeSelector name="typeId" />
+
                   {errors.moveId}
                 </Form.Group>
 
                 <br />
 
-                {/* screen selector */}
+                {/* rows group */}
                 <Form.Group controlId="validationFormik02">
-                  <ScreenSelector name="screenId" />
+                  <Form.Control
+                    type="text"
+                    name="rows"
+                    placeholder="Enter Rows"
+                    value={values.rows}
+                    onChange={handleChange}
+                    isInvalid={errors.rows}
+                  />
 
-                  {errors.screenId}
-                </Form.Group>
-
-                <br />
-
-                {/* screening time group */}
-                <Form.Group controlId="validationFormik03">
-                  <DateSelector name="time" />
-
-                  {errors.time}
+                  <Form.Control.Feedback type="invalid">
+                    {errors.rows}
+                  </Form.Control.Feedback>
                 </Form.Group>
 
                 <div className="pt-2">
@@ -367,3 +260,125 @@ export const ScreeningCreateModal = (props) => {
     </>
   );
 };
+
+// full delete bulk modal
+export function SeatBulkDeleteModal(props) {
+  // contain the state of the modal
+  const [show, setShow] = useState(false);
+
+  // set the state of the modal
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  // satus of the form requests
+  const [serverState, setServerState] = useState({
+    show: false,
+    error: false,
+    message: "none",
+  });
+
+  // set the server state from a response
+  const handleServerResponse = (show, error, message) => {
+    setServerState({ show, error, message });
+  };
+
+  // handle delete
+  const handleDelete = () => {
+    // create the json object to post
+    const json = {
+      seatIds: props.seatIds,
+    };
+
+    // axios post create
+    axios
+      .post(`${SEAT_URI}/bulk/delete`, json, {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      })
+      .then((response) => {
+        // set the server state to handle errors
+        handleServerResponse(false, false, response.data.message);
+        // reload the screen
+        mutate(`${SCREEN_URI}/${props.screenId}`);
+        // close the modal
+        handleClose();
+        // clear selected
+        props.clearSelected();
+      })
+      .catch(function (error) {
+        // catch each type of axios error
+        if (error.response) {
+          if (error.response.status == 500) {
+            // check if a server error
+            handleServerResponse(true, true, error.response.data.message);
+          } else if (error.response.status == 502) {
+            // check if api is offline
+            handleServerResponse(true, true, "Error fetching api");
+          } else {
+            // check if a user error
+            handleServerResponse(true, false, error.response.data.message);
+          }
+        } else if (error.request) {
+          // check if a request error
+          handleServerResponse(true, true, "Error sending request to server");
+        } else {
+          // check if a browser error
+          handleServerResponse(true, true, "Error in browser request");
+          console.log(error);
+        }
+      });
+  };
+
+  return (
+    <>
+      <Button variant="danger" onClick={handleShow} disabled={props.disabled}>
+        {props.seatIds.length == 0 ? (
+          "Delete Selected Seats"
+        ) : (
+          <>
+            {props.seatIds.length == 1
+              ? `Delete ${props.seatIds.length} Seat`
+              : `Delete ${props.seatIds.length} Seats`}
+          </>
+        )}
+      </Button>
+
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        size="md"
+        centered={true}
+        keyboard={false}
+      >
+        <Modal.Header className="bg-danger text-white">
+          <Modal.Title>Are you sure?</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          Are you sure you would like to delete {props.seatIds.length} seats?
+          <div className="pt-2">
+            {/* display errors to the user */}
+            {serverState.show && (
+              <Alert variant={!serverState.error ? "warning" : "danger"}>
+                {serverState.message}
+              </Alert>
+            )}
+          </div>
+        </Modal.Body>
+
+        <Modal.Footer>
+          {/* Close Modal button*/}
+          <Button variant="secondary" onClick={handleClose}>
+            Cancel
+          </Button>
+
+          {/* Delete button*/}
+          <Button variant="danger" onClick={handleDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}

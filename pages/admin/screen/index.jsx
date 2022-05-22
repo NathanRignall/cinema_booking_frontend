@@ -18,13 +18,13 @@ const Screen = (props) => {
     <>
       <Card>
         <Card.Header className="bg-secondary text-white">
-          <Link href={`/admin/screen/${props.info.id}`}>
+          <Link href={`/admin/screen/${props.info.id}`} passHref>
             <h4 className="d-inline">{props.info.name}</h4>
           </Link>
         </Card.Header>
 
         <Card.Body>
-          total setas - {props.info.totalSeats}
+          columns - {props.info.columns}
           <br />
           id - {props.info.id}
           <br />
@@ -53,7 +53,7 @@ const ScreenList = (props) => {
           FormedList
         ) : (
           <Alert variant="warning">
-            There are currently 0 xxx in the system.
+            There are currently 0 screens in the system.
           </Alert>
         )}
       </>

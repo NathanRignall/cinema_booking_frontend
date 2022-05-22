@@ -10,32 +10,10 @@ import { Delete } from "../../../components/widgets/managers/shared";
 import CinemaLayout from "../../../components/widgets/CinemaLayout";
 
 import { Card, Spinner, Button } from "react-bootstrap";
+import { SeatBulkCreateModal } from "../../../components/widgets/managers/seat";
 
 // axios request urls
 const SCREEN_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screen";
-
-// screening Card
-const ScreenCard = (props) => {
-  return (
-    <>
-      <Card>
-        <Card.Header className="bg-secondary text-white">
-          <h4 className="d-inline">{props.info.name}</h4>
-        </Card.Header>
-
-        <Card.Body>
-          <CinemaLayout
-            screen={props.info}
-            edit={true}
-            selectable={false}
-            purchase={false}
-          />
-        </Card.Body>
-      </Card>
-      <br />
-    </>
-  );
-};
 
 // main list loader
 const Screen = (props) => {
@@ -48,28 +26,45 @@ const Screen = (props) => {
         <h1 className="pt-4 mb-2 border-bottom">
           {data.payload.name}
 
-          <p className="lead mb-2">{data.payload.columns} Columns</p>
+          <p className="lead mb-2">{data.payload.columns} Columns - {data.payload.seats.length} Total Seats</p>
         </h1>
 
         <div>
-          <Button variant="warning" className="me-2">
-            Edit Screen
-          </Button>
+          <div className="me-2 d-inline">
+            <Button variant="warning">Edit Screen</Button>
+          </div>
 
-          <Delete
-            url={`${SCREEN_URI}/${data.payload.id}`}
-            mutate_url={SCREEN_URI}
-            type="Screen"
-            name={data.payload.name}
-            redirect={"/admin/screen"}
-          />
+          <div className="me-2 d-inline">
+            <Delete
+              url={`${SCREEN_URI}/${data.payload.id}`}
+              mutate_url={SCREEN_URI}
+              type="Screen"
+              name={data.payload.name}
+              redirect={"/admin/screen"}
+            />
+          </div>
+
+          {
+            (data.payload.seats == 0 ? (
+              <div className="me-2 d-inline">
+                <SeatBulkCreateModal
+                  screen={{
+                    id: data.payload.id,
+                    columns: data.payload.columns,
+                  }}
+                />
+              </div>
+            ) : null)
+          }
+          
         </div>
 
         <CinemaLayout
           screen={data.payload}
           edit={true}
-          selectable={false}
+          selectable={true}
           purchase={false}
+          delete={true}
         />
 
         <ErrorDisplayer error={error} />

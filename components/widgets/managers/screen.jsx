@@ -13,7 +13,6 @@ const SCREEN_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screen";
 // form schemas
 const schemaCreate = yup.object().shape({
   name: yup.string().required(),
-  rows: yup.number().required().positive().integer(),
   columns: yup.number().required().positive().integer(),
 });
 
@@ -110,9 +109,8 @@ export const ScreenCreateModal = (props) => {
         <Formik
           validationSchema={schemaCreate}
           initialValues={{
-            title: "",
-            description: "",
-            duration: 0,
+            name: "",
+            columns: 0,
           }}
           onSubmit={handleOnSubmit}
         >
@@ -139,24 +137,10 @@ export const ScreenCreateModal = (props) => {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                {/* rows group */}
-                <Form.Group controlId="validationFormik03">
-                  <Form.Control
-                    type="text"
-                    name="rows"
-                    placeholder="Enter Rows"
-                    value={values.rows}
-                    onChange={handleChange}
-                    isInvalid={errors.rows}
-                  />
-
-                  <Form.Control.Feedback type="invalid">
-                    {errors.rows}
-                  </Form.Control.Feedback>
-                </Form.Group>
+                <br />
 
                 {/* columns group */}
-                <Form.Group controlId="validationFormik03">
+                <Form.Group controlId="validationFormik02">
                   <Form.Control
                     type="text"
                     name="columns"
@@ -171,12 +155,14 @@ export const ScreenCreateModal = (props) => {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                {/* display errors to the user */}
-                {serverState.show && (
-                  <Alert variant={!serverState.error ? "warning" : "danger"}>
-                    {serverState.message}
-                  </Alert>
-                )}
+                <div className="pt-2">
+                  {/* display errors to the user */}
+                  {serverState.show && (
+                    <Alert variant={!serverState.error ? "warning" : "danger"}>
+                      {serverState.message}
+                    </Alert>
+                  )}
+                </div>
               </Modal.Body>
 
               <Modal.Footer>

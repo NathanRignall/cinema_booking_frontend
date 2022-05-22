@@ -6,6 +6,7 @@ import RGL, { WidthProvider } from "react-grid-layout";
 import _ from "lodash";
 
 import { PurchaseCreateModal } from "../managers/purchase";
+import { SeatBulkDeleteModal } from "../managers/seat";
 
 import { Card, Button } from "react-bootstrap";
 
@@ -35,6 +36,8 @@ export default class CinemaLayout extends React.PureComponent {
       }),
       layout: [],
       selected: [],
+      edit: false,
+      selectable: this.props.selectable,
       serverStateLayout: {
         show: false,
         error: false,
@@ -42,10 +45,13 @@ export default class CinemaLayout extends React.PureComponent {
       },
     };
     this.onLayoutChange = this.onLayoutChange.bind(this);
+    this.clearSelected = this.clearSelected.bind(this);
+    this.toggleEdit = this.toggleEdit.bind(this);
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.screen.seats !== this.props.screen.seats) {
+      this.clearSelected();
       this.setState({
         items: this.props.screen.seats.map(function (item, key, list) {
           return {
@@ -75,10 +81,10 @@ export default class CinemaLayout extends React.PureComponent {
         data-grid={item}
         style={itemStyle}
         onClick={
-          this.props.selectable ? this.selectSeat.bind(this, item.id) : null
+          this.state.selectable ? this.selectSeat.bind(this, item.id) : null
         }
         className={`${
-          item.selected ? "border border-primary border-4" : null
+          item.selected & this.state.selectable ? "border border-primary border-4" : null
         } ${item.occupied ? "opacity-25" : null} d-flex justify-content-center`}
       >
         <div className="align-self-center text-bold">
@@ -215,6 +221,20 @@ export default class CinemaLayout extends React.PureComponent {
     });
   }
 
+  clearSelected() {
+    this.setState({ selected: [] });
+  }
+
+  toggleEdit() {
+    if (this.props.edit) {
+      if (this.state.edit) {
+        this.setState({ edit: false, selectable: true, });
+      } else {
+        this.setState({ edit: true, selectable: false, });
+      }
+    }
+  }
+
   render() {
     return (
       <div className="mt-2">
@@ -228,24 +248,50 @@ export default class CinemaLayout extends React.PureComponent {
           </div>
         ) : null}
 
+        <div className="d-flex pb-2 flex-row-reverse">
+          {this.props.edit ? (
+            <div className="ms-2 d-inline">
+              <Button
+                variant={this.state.edit ? "success" : "primary"}
+                onClick={this.toggleEdit}
+              >
+                {this.state.edit ? "Finished Editing" : "Edit Positions"}
+              </Button>
+            </div>
+          ) : null}
+
+          {!this.state.edit & this.props.edit ? (
+            <div className="ms-2 d-inline">
+              <SeatBulkDeleteModal
+                screenId={this.props.screen.id}
+                seatIds={this.state.selected}
+                disabled={this.state.selected.length == 0}
+                clearSelected={this.clearSelected}
+              />
+            </div>
+          ) : null}
+        </div>
+
         <Card bg={"dark"} text={"white"} className="mb-5">
           <Card.Header className="text-center">Screen</Card.Header>
         </Card>
 
-        <ReactGridLayout
-          className="layout"
-          isDraggable={this.props.edit}
-          isResizable={false}
-          compactType={null}
-          containerPadding={[0, 0]}
-          rowHeight={50}
-          layout={this.state.layout}
-          onLayoutChange={this.onLayoutChange}
-          margin={[2, 2]}
-          cols={this.props.screen.columns}
-        >
-          {_.map(this.state.items, (item) => this.createElement(item))}
-        </ReactGridLayout>
+        <div className="pb-5">
+          <ReactGridLayout
+            className="layout"
+            isDraggable={this.state.edit}
+            isResizable={false}
+            compactType={null}
+            containerPadding={[0, 0]}
+            rowHeight={50}
+            layout={this.state.layout}
+            onLayoutChange={this.onLayoutChange}
+            margin={[2, 2]}
+            cols={this.props.screen.columns}
+          >
+            {_.map(this.state.items, (item) => this.createElement(item))}
+          </ReactGridLayout>
+        </div>
       </div>
     );
   }
