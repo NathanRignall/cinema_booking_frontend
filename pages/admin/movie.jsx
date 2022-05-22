@@ -26,8 +26,12 @@ const Movie = (props) => {
           <br />
           id - {props.info.id}
           <br />
-
-          <Delete url={`${MOVIE_URI}/${props.info.id}`} mutate_url={MOVIE_URI} type="Movie" name={props.info.title}/>
+          <Delete
+            url={`${MOVIE_URI}/${props.info.id}`}
+            mutate_url={MOVIE_URI}
+            type="Movie"
+            name={props.info.title}
+          />
         </Card.Body>
       </Card>
       <br />
@@ -74,10 +78,10 @@ const MovieList = (props) => {
 // main app function
 export default function Main() {
   return (
-    <Layout title="Admin Movies" access={0}>
-      <div className="d-flex">
-        <h1>Movie Lists</h1>
+    <Layout title="Admin Movies">
+      <h1 className="pt-4 mb-2 border-bottom">Movies</h1>
 
+      <div className="d-flex">
         <div className="ml-auto my-auto">
           <MovieCreateModal />
         </div>

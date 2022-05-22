@@ -10,7 +10,7 @@ export default function EmployeeNavbar(props) {
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-      <Link href="/">
+      <Link href="/" passHref>
         <Navbar.Brand>XL Cinima</Navbar.Brand>
       </Link>
 
@@ -18,20 +18,20 @@ export default function EmployeeNavbar(props) {
 
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
-          <Link href="/admin">
-            <Nav.Link href="/">Admin</Nav.Link>
+          <Link href="/admin" passHref>
+            <Nav.Link>Admin</Nav.Link>
           </Link>
 
-          <Link href="/admin/movie">
-            <Nav.Link href="/admin/movie">Movie</Nav.Link>
+          <Link href="/admin/movie" passHref>
+            <Nav.Link>Movie</Nav.Link>
           </Link>
 
-          <Link href="/admin/screen">
-            <Nav.Link href="/admin/screen">Screen</Nav.Link>
+          <Link href="/admin/screen" passHref>
+            <Nav.Link>Screen</Nav.Link>
           </Link>
 
-          <Link href="/admin/screening">
-            <Nav.Link href="/admin/screening">Screening</Nav.Link>
+          <Link href="/admin/screening" passHref>
+            <Nav.Link>Screening</Nav.Link>
           </Link>
         </Nav>
       </Navbar.Collapse>

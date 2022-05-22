@@ -1,6 +1,6 @@
 import Layout from "../../../components/layouts/default";
 
-import Link from 'next/link'
+import Link from "next/link";
 import useSWR from "swr";
 
 import { fetcher } from "../../../components/common/functions";
@@ -74,10 +74,10 @@ const ScreenList = (props) => {
 // main app function
 export default function Main() {
   return (
-    <Layout title="Admin Screens" access={0}>
-      <div className="d-flex">
-        <h1>Screen List</h1>
+    <Layout title="Admin Screens">
+      <h1 className="pt-4 mb-2 border-bottom">Screens</h1>
 
+      <div className="d-flex">
         <div className="ml-auto my-auto">
           <ScreenCreateModal />
         </div>

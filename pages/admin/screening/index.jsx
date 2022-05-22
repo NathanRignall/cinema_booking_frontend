@@ -83,8 +83,8 @@ const ScreeningList = (props) => {
 // main app function
 export default function Main() {
   return (
-    <Layout title="Admin Movies" access={0}>
-      <h1 className="pt-4 mb-2 border-bottom">Screening</h1>
+    <Layout title="Admin Movies">
+      <h1 className="pt-4 mb-2 border-bottom">Screenings</h1>
 
       <div className="d-flex">
         <div className="ml-auto my-auto">
