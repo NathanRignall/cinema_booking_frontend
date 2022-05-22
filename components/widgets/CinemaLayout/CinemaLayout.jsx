@@ -5,6 +5,8 @@ import axios from "axios";
 import RGL, { WidthProvider } from "react-grid-layout";
 import _ from "lodash";
 
+import { PurchaseCreateModal } from "../managers/purchase";
+
 import { Card, Button } from "react-bootstrap";
 
 // axios request urls
@@ -18,7 +20,7 @@ export default class CinemaLayout extends React.PureComponent {
     super(props);
 
     this.state = {
-      items: this.props.seats.map(function (item, key, list) {
+      items: this.props.screen.seats.map(function (item, key, list) {
         return {
           id: item.id,
           x: item.x,
@@ -43,9 +45,9 @@ export default class CinemaLayout extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.seats !== this.props.seats) {
+    if (prevProps.screen.seats !== this.props.screen.seats) {
       this.setState({
-        items: this.props.seats.map(function (item, key, list) {
+        items: this.props.screen.seats.map(function (item, key, list) {
           return {
             id: item.id,
             x: item.x,
@@ -77,16 +79,11 @@ export default class CinemaLayout extends React.PureComponent {
         }
         className={`${
           item.selected ? "border border-primary border-4" : null
-        } ${
-          item.occupied ? "opacity-25" : null
-        } d-flex justify-content-center`}
+        } ${item.occupied ? "opacity-25" : null} d-flex justify-content-center`}
       >
-        
-          <div className="align-self-center text-bold">
+        <div className="align-self-center text-bold">
           <b>{item.name}</b>
-          </div>
-
-        
+        </div>
       </div>
     );
   }
@@ -103,7 +100,7 @@ export default class CinemaLayout extends React.PureComponent {
       let x = item.x;
       let y = item.y;
 
-      let previous = this.props.seats.find((seat) => seat.id === id);
+      let previous = this.props.screen.seats.find((seat) => seat.id === id);
 
       if (previous.x != x || previous.y != y) {
         json.seats.push({
@@ -130,7 +127,7 @@ export default class CinemaLayout extends React.PureComponent {
           },
         });
         // reload
-        mutate(`${SCREEN_URI}/${this.props.id}`);
+        mutate(`${SCREEN_URI}/${this.props.screen.id}`);
       })
       .catch((error) => {
         // catch each type of axios error
@@ -205,7 +202,7 @@ export default class CinemaLayout extends React.PureComponent {
           }
         } else {
           if (item.selected == true) {
-            selected.push(seatId);
+            selected.push(item.id);
           }
           return item;
         }
@@ -223,12 +220,11 @@ export default class CinemaLayout extends React.PureComponent {
       <div className="mt-2">
         {this.props.purchase ? (
           <div className="d-flex pb-2 flex-row-reverse">
-            <Button
+            <PurchaseCreateModal
+              screeningId={this.props.screeningId}
+              seatIds={this.state.selected}
               disabled={this.state.selected.length == 0}
-              classvariant="primary"
-            >
-              Reserve Selected
-            </Button>
+            />
           </div>
         ) : null}
 
@@ -246,7 +242,7 @@ export default class CinemaLayout extends React.PureComponent {
           layout={this.state.layout}
           onLayoutChange={this.onLayoutChange}
           margin={[2, 2]}
-          cols={this.props.columns}
+          cols={this.props.screen.columns}
         >
           {_.map(this.state.items, (item) => this.createElement(item))}
         </ReactGridLayout>

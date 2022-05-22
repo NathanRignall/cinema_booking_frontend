@@ -1,11 +1,11 @@
-import { useState, useEffect, forwardRef } from "react";
-import useSWR, { mutate } from "swr";
+import { useState } from "react";
+import { mutate } from "swr";
 
-import { Formik, useField, useFormikContext } from "formik";
+import { Formik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 
-import { Form, Button, Spinner, Modal, Alert, Dropdown } from "react-bootstrap";
+import { Form, Button, Spinner, Modal, Alert } from "react-bootstrap";
 
 // axios request urls
 const SCREEN_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screen";

@@ -2,7 +2,7 @@ import { useAppContext } from "../context/state";
 
 import Link from "next/link";
 
-import { Navbar, Nav, NavDropdown, Dropdown, Badge } from "react-bootstrap";
+import { Navbar, Nav } from "react-bootstrap";
 
 export default function EmployeeNavbar(props) {
   // global app context

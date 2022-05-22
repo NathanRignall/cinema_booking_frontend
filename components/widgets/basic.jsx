@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Spinner, Alert, Button } from "react-bootstrap";
+import { Spinner, Alert } from "react-bootstrap";
 
 // basic loader spiral in the center of screen
 export const Loader = (props) => (
