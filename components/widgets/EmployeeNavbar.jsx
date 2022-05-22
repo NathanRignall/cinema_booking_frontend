@@ -5,9 +5,6 @@ import Link from "next/link";
 import { Navbar, Nav } from "react-bootstrap";
 
 export default function EmployeeNavbar(props) {
-  // global app context
-  const context = useAppContext();
-
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Link href="/" passHref>
@@ -32,6 +29,14 @@ export default function EmployeeNavbar(props) {
 
           <Link href="/admin/screening" passHref>
             <Nav.Link>Screening</Nav.Link>
+          </Link>
+
+          <Link href="/admin/profile" passHref>
+            <Nav.Link>Profile</Nav.Link>
+          </Link>
+
+          <Link href="/admin/type" passHref>
+            <Nav.Link>Type</Nav.Link>
           </Link>
         </Nav>
       </Navbar.Collapse>
