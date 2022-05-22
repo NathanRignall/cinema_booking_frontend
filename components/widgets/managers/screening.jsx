@@ -42,7 +42,10 @@ const MovieSelector = (props) => {
   const handleSearch = (query) => {
     // make the axios request for search
     axios
-      .get(`${MOVIE_URI}/find?find=${query}`)
+      .get(`${MOVIE_URI}/find?find=${query}`, {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      })
       .then((response) => {
         // put the response into array
         const options = response.data.payload.map((items) => ({
@@ -112,7 +115,10 @@ const ScreenSelector = (props) => {
   const handleSearch = (query) => {
     // make the axios request for search
     axios
-      .get(`${SCREEN_URI}/find?find=${query}`)
+      .get(`${SCREEN_URI}/find?find=${query}`, {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      })
       .then((response) => {
         // put the response into array
         const options = response.data.payload.map((items) => ({
@@ -305,7 +311,7 @@ export const ScreeningCreateModal = (props) => {
                 {/* movie selector */}
                 <Form.Group controlId="validationFormik01">
                   <MovieSelector name="movieId" />
-                  
+
                   {errors.moveId}
                 </Form.Group>
 
