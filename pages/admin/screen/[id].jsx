@@ -2,14 +2,14 @@ import Layout from "../../../components/layouts/default";
 
 import React from "react";
 import { useRouter } from "next/router";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 
 import { fetcher } from "../../../components/common/functions";
 import { ErrorDisplayer } from "../../../components/widgets/basic";
 import { Delete } from "../../../components/widgets/managers/shared";
 import CinemaLayout from "../../../components/widgets/CinemaLayout";
 
-import { Card, Spinner, Alert } from "react-bootstrap";
+import { Card, Spinner, Button } from "react-bootstrap";
 
 // axios request urls
 const SCREEN_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screen";
@@ -24,7 +24,12 @@ const ScreenCard = (props) => {
         </Card.Header>
 
         <Card.Body>
-          <CinemaLayout {...props.info} edit={true} />
+          <CinemaLayout
+            screen={props.info}
+            edit={true}
+            selectable={false}
+            purchase={false}
+          />
         </Card.Body>
       </Card>
       <br />
@@ -40,9 +45,34 @@ const Screen = (props) => {
   if (data) {
     return (
       <>
-        <ErrorDisplayer error={error} />
+        <h1 className="pt-4 mb-2 border-bottom">
+          {data.payload.name}
 
-        <ScreenCard info={data.payload} />
+          <p className="lead mb-2">{data.payload.columns} Columns</p>
+        </h1>
+
+        <div>
+          <Button variant="warning" className="me-2">
+            Edit Screen
+          </Button>
+
+          <Delete
+            url={`${SCREEN_URI}/${data.payload.id}`}
+            mutate_url={SCREEN_URI}
+            type="Screen"
+            name={data.payload.name}
+            redirect={"/admin/screen"}
+          />
+        </div>
+
+        <CinemaLayout
+          screen={data.payload}
+          edit={true}
+          selectable={false}
+          purchase={false}
+        />
+
+        <ErrorDisplayer error={error} />
       </>
     );
   } else {
