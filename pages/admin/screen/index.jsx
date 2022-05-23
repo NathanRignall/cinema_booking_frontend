@@ -17,7 +17,7 @@ const Screen = (props) => {
   return (
     <>
       <Card>
-        <Card.Header className="bg-secondary text-white">
+        <Card.Header className="bg-success text-white">
           <Link href={`/admin/screen/${props.info.id}`} passHref>
             <h4 className="d-inline">{props.info.name}</h4>
           </Link>

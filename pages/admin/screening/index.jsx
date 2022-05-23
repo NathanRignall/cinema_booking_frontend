@@ -18,7 +18,7 @@ const Screening = (props) => {
   return (
     <>
       <Card>
-        <Card.Header className="bg-secondary text-white">
+        <Card.Header className="bg-success text-white">
           <Link href={`/admin/screening/${props.info.id}`}>
             <h4 className="d-inline">{props.info.time}</h4>
           </Link>
