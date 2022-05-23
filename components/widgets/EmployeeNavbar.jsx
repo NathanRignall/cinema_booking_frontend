@@ -19,28 +19,24 @@ export default function EmployeeNavbar(props) {
             <Nav.Link>Home</Nav.Link>
           </Link>
 
-          <Link href="/admin/purchase" passHref>
-            <Nav.Link>Purchase</Nav.Link>
+          <Link href="/admin/screening" passHref>
+            <Nav.Link>Screenings</Nav.Link>
           </Link>
 
           <Link href="/admin/movie" passHref>
-            <Nav.Link>Movie</Nav.Link>
+            <Nav.Link>Movies</Nav.Link>
           </Link>
 
           <Link href="/admin/screen" passHref>
-            <Nav.Link>Screen</Nav.Link>
-          </Link>
-
-          <Link href="/admin/screening" passHref>
-            <Nav.Link>Screening</Nav.Link>
+            <Nav.Link>Screens</Nav.Link>
           </Link>
 
           <Link href="/admin/profile" passHref>
-            <Nav.Link>Profile</Nav.Link>
+            <Nav.Link>Profiles</Nav.Link>
           </Link>
 
           <Link href="/admin/type" passHref>
-            <Nav.Link>Type</Nav.Link>
+            <Nav.Link>Types</Nav.Link>
           </Link>
         </Nav>
       </Navbar.Collapse>

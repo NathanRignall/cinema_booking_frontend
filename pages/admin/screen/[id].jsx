@@ -75,6 +75,7 @@ const Screenings = (props) => {
             <tr>
               <th>Movie Title</th>
               <th>Time</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>{ScreeningsFormedList}</tbody>
