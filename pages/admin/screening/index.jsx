@@ -22,29 +22,31 @@ const Screening = (props) => {
         <td>{props.info.movie.duration}</td>
         <td>{props.info.screen.name}</td>
         <td>{props.info.time}</td>
-        <td className="d-flex justify-content-end">
-          <div className="me-1">
-            <Link href={`/admin/screening/${props.info.id}`} passHref>
-              <Button variant="primary" size="sm">
-                View
+        <td>
+          <div className="d-flex justify-content-end">
+            <div className="me-1">
+              <Link href={`/admin/screening/${props.info.id}`} passHref>
+                <Button variant="primary" size="sm">
+                  View
+                </Button>
+              </Link>
+            </div>
+
+            <div className="me-1">
+              <Button variant="warning" size="sm">
+                Edit
               </Button>
-            </Link>
-          </div>
+            </div>
 
-          <div className="me-1">
-            <Button variant="warning" size="sm">
-              Edit
-            </Button>
-          </div>
-
-          <div className="me-1">
-            <Delete
-              url={`${SCREENING_URI}/${props.info.id}`}
-              mutate_url={SCREENING_URI}
-              message="Delete"
-              name={props.info.movie.title}
-              size="sm"
-            />
+            <div className="me-1">
+              <Delete
+                url={`${SCREENING_URI}/${props.info.id}`}
+                mutate_url={SCREENING_URI}
+                message="Delete"
+                name={`${props.info.movie.title} Screening`}
+                size="sm"
+              />
+            </div>
           </div>
         </td>
       </tr>
@@ -66,7 +68,7 @@ const ScreeningList = (props) => {
       <>
         <ErrorDisplayer error={error} />
 
-        <Table striped bordered hover>
+        <Table striped bordered responsive>
           <thead>
             <tr>
               <th>Movie Title</th>

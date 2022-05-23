@@ -19,27 +19,29 @@ const Movie = (props) => {
       <tr>
         <td>{props.info.title}</td>
         <td>{props.info.duration}</td>
-        <td className="d-flex justify-content-end">
-          <div className="me-1">
-            <Button variant="primary" size="sm">
-              View
-            </Button>
-          </div>
+        <td>
+          <div className="d-flex justify-content-end">
+            <div className="me-1">
+              <Button variant="primary" size="sm">
+                View
+              </Button>
+            </div>
 
-          <div className="me-1">
-            <Button variant="warning" size="sm">
-              Edit
-            </Button>
-          </div>
+            <div className="me-1">
+              <Button variant="warning" size="sm">
+                Edit
+              </Button>
+            </div>
 
-          <div className="me-1">
-            <Delete
-              url={`${MOVIE_URI}/${props.info.id}`}
-              mutate_url={MOVIE_URI}
-              message="Delete"
-              name={props.info.title}
-              size="sm"
-            />
+            <div className="me-1">
+              <Delete
+                url={`${MOVIE_URI}/${props.info.id}`}
+                mutate_url={MOVIE_URI}
+                message="Delete"
+                name={props.info.title}
+                size="sm"
+              />
+            </div>
           </div>
         </td>
       </tr>
@@ -59,7 +61,7 @@ const MovieList = (props) => {
 
     return (
       <>
-        <Table striped bordered>
+        <Table striped bordered responsive>
           <thead>
             <tr>
               <th>Movie Title</th>

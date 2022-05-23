@@ -31,14 +31,14 @@ const Screening = (props) => {
         </h1>
 
         <div>
-          <Button variant="primary" className="me-2">
-            Edit Screening
+          <Button variant="warning" className="me-2">
+            Edit
           </Button>
 
           <Delete
             url={`${SCREENING_URI}/${data.payload.id}`}
             mutate_url={SCREENING_URI}
-            message="Screening"
+            message="Delete"
             name={data.payload.movie.title}
             redirect={"/admin/screening"}
           />

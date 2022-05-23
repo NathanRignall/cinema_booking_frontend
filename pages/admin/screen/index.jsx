@@ -19,25 +19,27 @@ const Screen = (props) => {
       <tr>
         <td>{props.info.name}</td>
         <td>{props.info.columns}</td>
-        <td className="d-flex justify-content-end">
-          <div className="me-1">
-            <Link href={`/admin/screen/${props.info.id}`} passHref>
-              <Button variant="primary" size="sm">
-                View
+        <td>
+          <div className="d-flex justify-content-end">
+            <div className="me-1">
+              <Link href={`/admin/screen/${props.info.id}`} passHref>
+                <Button variant="primary" size="sm">
+                  View
+                </Button>
+              </Link>
+            </div>
+
+            <div className="me-1">
+              <Button variant="warning" size="sm">
+                Edit
               </Button>
-            </Link>
-          </div>
+            </div>
 
-          <div className="me-1">
-            <Button variant="warning" size="sm">
-              Edit
-            </Button>
-          </div>
-
-          <div className="me-1">
-            <Button variant="danger" size="sm">
-              Delete
-            </Button>
+            <div className="me-1">
+              <Button variant="danger" size="sm">
+                Delete
+              </Button>
+            </div>
           </div>
         </td>
       </tr>
@@ -59,7 +61,7 @@ const ScreenList = (props) => {
       <>
         <ErrorDisplayer error={error} />
 
-        <Table striped bordered hover>
+        <Table striped bordered responsive>
           <thead>
             <tr>
               <th>Screen Name</th>

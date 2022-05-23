@@ -19,27 +19,23 @@ const Profile = (props) => {
       <tr>
         <td>{props.info.name}</td>
         <td>{props.info.price}%</td>
-        <td className="d-flex justify-content-end">
-          <div className="me-1">
-            <Button variant="primary" size="sm">
-              View
-            </Button>
-          </div>
+        <td>
+          <div className="d-flex justify-content-end">
+            <div className="me-1">
+              <Button variant="warning" size="sm">
+                Edit
+              </Button>
+            </div>
 
-          <div className="me-1">
-            <Button variant="warning" size="sm">
-              Edit
-            </Button>
-          </div>
-
-          <div className="me-1">
-            <Delete
-              url={`${PROFILE_URI}/${props.info.id}`}
-              mutate_url={PROFILE_URI}
-              message="Delete"
-              name={props.info.name}
-              size="sm"
-            />
+            <div className="me-1">
+              <Delete
+                url={`${PROFILE_URI}/${props.info.id}`}
+                mutate_url={PROFILE_URI}
+                message="Delete"
+                name={props.info.name}
+                size="sm"
+              />
+            </div>
           </div>
         </td>
       </tr>
@@ -59,7 +55,7 @@ const ProfileList = (props) => {
 
     return (
       <>
-        <Table striped bordered>
+        <Table striped bordered responsive>
           <thead>
             <tr>
               <th>Profile Name</th>

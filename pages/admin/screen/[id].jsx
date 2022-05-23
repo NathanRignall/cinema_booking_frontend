@@ -1,5 +1,6 @@
 import Layout from "../../../components/layouts/employee";
 
+import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
@@ -22,6 +23,33 @@ const Screening = (props) => {
     <tr>
       <td>{props.movie.title}</td>
       <td>{props.time}</td>
+      <td>
+          <div className="d-flex justify-content-end">
+            <div className="me-1">
+              <Link href={`/admin/screening/${props.id}`} passHref>
+                <Button variant="primary" size="sm">
+                  View
+                </Button>
+              </Link>
+            </div>
+
+            <div className="me-1">
+              <Button variant="warning" size="sm">
+                Edit
+              </Button>
+            </div>
+
+            <div className="me-1">
+              <Delete
+                url={`${SCREENING_URI}/${props.id}`}
+                mutate_url={SCREENING_URI}
+                message="Delete"
+                name={`${props.movie.title} Screening`}
+                size="sm"
+              />
+            </div>
+          </div>
+        </td>
     </tr>
   );
 };
@@ -39,7 +67,7 @@ const Screenings = (props) => {
 
     return (
       <>
-        <Table striped bordered>
+        <Table striped bordered responsive>
           <thead>
             <tr>
               <th>Movie Title</th>

@@ -19,21 +19,23 @@ const Type = (props) => {
       <tr>
         <td>{props.info.name}</td>
         <td>£{props.info.price / 100}</td>
-        <td className="d-flex justify-content-end">
-          <div className="me-1">
-            <Button variant="warning" size="sm">
-              Edit
-            </Button>
-          </div>
+        <td>
+          <div className="d-flex justify-content-end">
+            <div className="me-1">
+              <Button variant="warning" size="sm">
+                Edit
+              </Button>
+            </div>
 
-          <div className="me-1">
-            <Delete
-              url={`${TYPE_URI}/${props.info.id}`}
-              mutate_url={TYPE_URI}
-              message="Delete"
-              name={props.info.name}
-              size="sm"
-            />
+            <div className="me-1">
+              <Delete
+                url={`${TYPE_URI}/${props.info.id}`}
+                mutate_url={TYPE_URI}
+                message="Delete"
+                name={props.info.name}
+                size="sm"
+              />
+            </div>
           </div>
         </td>
       </tr>
@@ -53,7 +55,7 @@ const TypeList = (props) => {
 
     return (
       <>
-        <Table striped bordered>
+        <Table striped bordered responsive>
           <thead>
             <tr>
               <th>Seat Type</th>
