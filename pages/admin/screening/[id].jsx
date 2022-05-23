@@ -20,28 +20,34 @@ const Screening = (props) => {
 
   // check if data has loaded yet
   if (data) {
+
+    const date = new Date(data.payload.time);
+    const dateString = date.toLocaleString();
+
     return (
       <>
         <h1 className="pt-4 mb-2 border-bottom">
           {data.payload.movie.title}
 
           <p className="lead mb-2">
-            {data.payload.screen.name} - {data.payload.time}
+            {data.payload.screen.name} - {dateString}
           </p>
         </h1>
 
         <div>
-          <Button variant="warning" className="me-2">
-            Edit
-          </Button>
+          <div className="me-2 d-inline">
+            <Button variant="warning">Edit</Button>
+          </div>
 
+          <div className="me-2 d-inline">
           <Delete
             url={`${SCREENING_URI}/${data.payload.id}`}
             mutate_url={SCREENING_URI}
             message="Delete"
-            name={data.payload.movie.title}
+            name={`${data.payload.movie.title} Screening`}
             redirect={"/admin/screening"}
           />
+          </div>
         </div>
 
         <CinemaLayout

@@ -84,7 +84,9 @@ export default class CinemaLayout extends React.PureComponent {
           this.state.selectable ? this.selectSeat.bind(this, item.id) : null
         }
         className={`${
-          item.selected & this.state.selectable ? "border border-primary border-4" : null
+          item.selected & this.state.selectable
+            ? "border border-primary border-4"
+            : null
         } ${item.occupied ? "opacity-25" : null} d-flex justify-content-center`}
       >
         <div className="align-self-center text-bold">
@@ -228,27 +230,27 @@ export default class CinemaLayout extends React.PureComponent {
   toggleEdit() {
     if (this.props.edit) {
       if (this.state.edit) {
-        this.setState({ edit: false, selectable: true, });
+        this.setState({ edit: false, selectable: true });
       } else {
-        this.setState({ edit: true, selectable: false, });
+        this.setState({ edit: true, selectable: false });
       }
     }
   }
 
   render() {
     return (
-      <div className="mt-2">
-        {this.props.purchase ? (
-          <div className="d-flex pb-2 flex-row-reverse">
-            <PurchaseCreateModal
-              screeningId={this.props.screeningId}
-              seatIds={this.state.selected}
-              disabled={this.state.selected.length == 0}
-            />
-          </div>
-        ) : null}
-
+      <div>
         <div className="d-flex pb-2 flex-row-reverse">
+          {this.props.purchase ? (
+            <div className="ms-2 d-inline">
+              <PurchaseCreateModal
+                screeningId={this.props.screeningId}
+                seatIds={this.state.selected}
+                disabled={this.state.selected.length == 0}
+              />
+            </div>
+          ) : null}
+
           {this.props.edit ? (
             <div className="ms-2 d-inline">
               <Button
@@ -276,7 +278,7 @@ export default class CinemaLayout extends React.PureComponent {
           <Card.Header className="text-center">Screen</Card.Header>
         </Card>
 
-        <div className="pb-5">
+        <div className="mt-2 pb-5">
           <ReactGridLayout
             className="layout"
             isDraggable={this.state.edit}

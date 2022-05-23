@@ -15,13 +15,16 @@ const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screening";
 
 // screening Card
 const Screening = (props) => {
+  const date = new Date(props.info.time);
+  const dateString = date.toLocaleString();
+
   return (
     <>
       <tr>
         <td>{props.info.movie.title}</td>
         <td>{props.info.movie.duration}</td>
         <td>{props.info.screen.name}</td>
-        <td>{props.info.time}</td>
+        <td>{dateString}</td>
         <td>
           <div className="d-flex justify-content-end">
             <div className="me-1">

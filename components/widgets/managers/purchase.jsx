@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { mutate } from "swr";
 
-import { Formik } from "formik";
+import { Formik, useField, useFormikContext } from "formik";
 import * as yup from "yup";
+import { AsyncTypeahead } from "react-bootstrap-typeahead";
 import axios from "axios";
 
 import { Form, Button, Spinner, Modal, Alert } from "react-bootstrap";
@@ -12,9 +13,86 @@ const MOVIE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/movie";
 const SCREEN_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screen";
 const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screening";
 const PURCHASE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/purchase";
+const TYPE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/type";
+const PROFILE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/profile";
 
 // create schema
-const schemaCreate = yup.object().shape({});
+const schemaCreate = yup.object().shape({
+  profileId: yup.string().required(),
+});
+
+// profile selector component
+const ProfileSelector = (props) => {
+  // send details back to formik
+  const { setFieldValue } = useFormikContext();
+
+  // hold the current status
+  const [isLoading, setIsLoading] = useState(false);
+  const [options, setOptions] = useState([]);
+  const [singleSelections, setSingleSelections] = useState([]);
+
+  // if a single item is selected set the formik status
+  useEffect(() => {
+    if (singleSelections.length > 0) {
+      setFieldValue(props.name, singleSelections[0].id);
+    }
+  }, [singleSelections]);
+
+  // main feild searcher
+  const handleSearch = (query) => {
+    // make the axios request for search
+    axios
+      .get(`${PROFILE_URI}/find?find=${query}`, {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      })
+      .then((response) => {
+        // put the response into array
+        const options = response.data.payload.map((items) => ({
+          name: items.name,
+          id: items.id,
+        }));
+        // set the options state to this new array
+        setOptions(options);
+      })
+      .catch((error) => {
+        // catch each type of axios error
+        if (error.response) {
+          if (error.response.status == 400) {
+            console.log("No results in search");
+          } else {
+            console.log("Error with response in search");
+          }
+        } else if (error.request) {
+          console.log("No response in search");
+        } else {
+          console.log("Axios error in search");
+        }
+        // set options to itself
+        setOptions(options);
+      });
+  };
+
+  const filterBy = () => true;
+
+  return (
+    <AsyncTypeahead
+      id={props.name}
+      name={props.name}
+      multiple={false}
+      filterBy={filterBy}
+      isLoading={isLoading}
+      labelKey="name"
+      minLength={0}
+      onSearch={handleSearch}
+      options={options}
+      onChange={setSingleSelections}
+      selected={singleSelections}
+      placeholder="Enter Profile Name..."
+      renderMenuItemChildren={(option, props) => <span>{option.name}</span>}
+    />
+  );
+};
 
 // full purcahse crcreateease modal
 export const PurchaseCreateModal = (props) => {
@@ -41,9 +119,14 @@ export const PurchaseCreateModal = (props) => {
   const handleOnSubmit = (values, actions) => {
     // create the json object to post
     const json = {
-      paid: true,
+      paid: values.paid,
       screeningId: props.screeningId,
-      seatIds: props.seatIds,
+      seats: props.seatIds.map((id) => {
+        return {
+          id: id,
+          profileId: values.profileId,
+        };
+      }),
     };
 
     // axios post create
@@ -110,6 +193,7 @@ export const PurchaseCreateModal = (props) => {
           validationSchema={schemaCreate}
           initialValues={{
             paid: true,
+            profileId: "",
           }}
           onSubmit={handleOnSubmit}
         >
@@ -120,8 +204,14 @@ export const PurchaseCreateModal = (props) => {
               </Modal.Header>
 
               <Modal.Body>
-                
-                Collect payment now.
+                {/* profile selector */}
+                <Form.Group controlId="validationFormik01">
+                  <ProfileSelector name="profileId" />
+
+                  {errors.profileId}
+                </Form.Group>
+
+                <br />
 
                 <div className="pt-2">
                   {/* display errors to the user */}

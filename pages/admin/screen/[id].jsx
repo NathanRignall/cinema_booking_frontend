@@ -19,10 +19,13 @@ const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screening";
 
 // table entry for screening
 const Screening = (props) => {
+  const date = new Date(props.time);
+  const dateString = date.toLocaleString();
+
   return (
     <tr>
       <td>{props.movie.title}</td>
-      <td>{props.time}</td>
+      <td>{dateString}</td>
       <td>
           <div className="d-flex justify-content-end">
             <div className="me-1">
