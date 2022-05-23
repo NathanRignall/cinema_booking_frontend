@@ -1,4 +1,4 @@
-import Layout from "../../../components/layouts/default";
+import Layout from "../../../components/layouts/employee";
 
 import Link from "next/link";
 import useSWR from "swr";

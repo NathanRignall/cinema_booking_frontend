@@ -1,4 +1,4 @@
-import Layout from "../../components/layouts/default";
+import Layout from "../../components/layouts/employee";
 
 // main app function
 export default function Main() {

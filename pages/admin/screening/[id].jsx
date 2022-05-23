@@ -1,4 +1,4 @@
-import Layout from "../../../components/layouts/default";
+import Layout from "../../../components/layouts/employee";
 
 import React from "react";
 import { useRouter } from "next/router";

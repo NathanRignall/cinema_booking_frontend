@@ -1,36 +1,40 @@
 import Layout from "../../components/layouts/employee";
 
+import Link from "next/link";
 import useSWR from "swr";
 
 import { fetcher } from "../../components/common/functions";
 import { ErrorDisplayer } from "../../components/widgets/basic";
 import { Delete } from "../../components/widgets/managers/shared";
-import { MovieCreateModal } from "../../components/widgets/managers/movie";
 
 import { Card, Spinner, Alert } from "react-bootstrap";
 
 // axios request urls
-const MOVIE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/movie";
+const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screening";
 
-// movie Card
-const Movie = (props) => {
+// screening Card
+const Screening = (props) => {
   return (
     <>
       <Card>
         <Card.Header className="bg-secondary text-white">
-          <h4 className="d-inline">{props.info.title}</h4>
+          <Link href={`/admin/screening/${props.info.id}`} passHref>
+            <h4 className="d-inline">{props.info.time}</h4>
+          </Link>
         </Card.Header>
 
         <Card.Body>
-          duration - {props.info.duration}
+          {props.info.movie.title}
           <br />
-          id - {props.info.id}
+          {props.info.screen.name}
+          <br />
+          {props.info.id}
           <br />
           <Delete
-            url={`${MOVIE_URI}/${props.info.id}`}
-            mutate_url={MOVIE_URI}
-            type="Movie"
-            name={props.info.title}
+            url={`${SCREENING_URI}/${props.info.id}`}
+            mutate_url={SCREENING_URI}
+            type="Screening"
+            name={props.info.movie.title}
           />
         </Card.Body>
       </Card>
@@ -40,13 +44,13 @@ const Movie = (props) => {
 };
 
 // main list loader
-const MovieList = (props) => {
-  const { data, error } = useSWR(MOVIE_URI, fetcher);
+const ScreeningList = (props) => {
+  const { data, error } = useSWR(SCREENING_URI, fetcher);
 
   // check if data has loaded yet
   if (data) {
     const FormedList = data.payload.map((item) => (
-      <Movie key={item.id} info={item} />
+      <Screening key={item.id} info={item} />
     ));
 
     return (
@@ -57,7 +61,7 @@ const MovieList = (props) => {
           FormedList
         ) : (
           <Alert variant="warning">
-            There are currently 0 xxx in the system.
+            There are currently 0 screenings in the system.
           </Alert>
         )}
       </>
@@ -78,17 +82,17 @@ const MovieList = (props) => {
 // main app function
 export default function Main() {
   return (
-    <Layout title="Admin Movies">
-      <h1 className="pt-4 mb-2 border-bottom">Movies</h1>
+    <Layout title="Purchase">
+      <h1 className="pt-4 mb-2 border-bottom">Films</h1>
 
       <div className="d-flex">
         <div className="ml-auto my-auto">
-          <MovieCreateModal />
+          {/* <ScreeningCreateModal /> */}
         </div>
       </div>
 
       <br />
-      <MovieList />
+      IN DEV
     </Layout>
   );
 }

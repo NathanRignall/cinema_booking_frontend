@@ -16,7 +16,11 @@ export default function EmployeeNavbar(props) {
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
           <Link href="/admin" passHref>
-            <Nav.Link>Admin</Nav.Link>
+            <Nav.Link>Home</Nav.Link>
+          </Link>
+
+          <Link href="/admin/purchase" passHref>
+            <Nav.Link>Purchase</Nav.Link>
           </Link>
 
           <Link href="/admin/movie" passHref>
