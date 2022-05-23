@@ -7,7 +7,7 @@ import { ErrorDisplayer } from "../../components/widgets/basic";
 import { Delete } from "../../components/widgets/managers/shared";
 import { ProfileCreateModal } from "../../components/widgets/managers/profile";
 
-import { Card, Spinner, Alert } from "react-bootstrap";
+import { Table, Spinner, Button } from "react-bootstrap";
 
 // axios request urls
 const PROFILE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/profile";
@@ -16,25 +16,33 @@ const PROFILE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/profile";
 const Profile = (props) => {
   return (
     <>
-      <Card>
-        <Card.Header className="bg-secondary text-white">
-          <h4 className="d-inline">{props.info.name}</h4>
-        </Card.Header>
+      <tr>
+        <td>{props.info.name}</td>
+        <td>{props.info.price}%</td>
+        <td className="d-flex justify-content-end">
+          <div className="me-1">
+            <Button variant="primary" size="sm">
+              View
+            </Button>
+          </div>
 
-        <Card.Body>
-          price - {props.info.price}
-          <br />
-          id - {props.info.id}
-          <br />
-          <Delete
-            url={`${PROFILE_URI}/${props.info.id}`}
-            mutate_url={PROFILE_URI}
-            type="Profile"
-            name={props.info.name}
-          />
-        </Card.Body>
-      </Card>
-      <br />
+          <div className="me-1">
+            <Button variant="warning" size="sm">
+              Edit
+            </Button>
+          </div>
+
+          <div className="me-1">
+            <Delete
+              url={`${PROFILE_URI}/${props.info.id}`}
+              mutate_url={PROFILE_URI}
+              message="Delete"
+              name={props.info.name}
+              size="sm"
+            />
+          </div>
+        </td>
+      </tr>
     </>
   );
 };
@@ -51,15 +59,18 @@ const ProfileList = (props) => {
 
     return (
       <>
-        <ErrorDisplayer error={error} />
+        <Table striped bordered>
+          <thead>
+            <tr>
+              <th>Profile Name</th>
+              <th>Discount Precentage</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>{FormedList}</tbody>
+        </Table>
 
-        {data.payload.length > 0 ? (
-          FormedList
-        ) : (
-          <Alert variant="warning">
-            There are currently 0 profiles in the system.
-          </Alert>
-        )}
+        <ErrorDisplayer error={error} />
       </>
     );
   } else {

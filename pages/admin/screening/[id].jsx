@@ -38,7 +38,7 @@ const Screening = (props) => {
           <Delete
             url={`${SCREENING_URI}/${data.payload.id}`}
             mutate_url={SCREENING_URI}
-            type="Screening"
+            message="Screening"
             name={data.payload.movie.title}
             redirect={"/admin/screening"}
           />

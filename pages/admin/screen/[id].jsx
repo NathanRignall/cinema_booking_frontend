@@ -127,14 +127,14 @@ const Screen = (props) => {
 
         <div>
           <div className="me-2 d-inline">
-            <Button variant="warning">Edit Screen</Button>
+            <Button variant="warning">Edit</Button>
           </div>
 
           <div className="me-2 d-inline">
             <Delete
               url={`${SCREEN_URI}/${data.payload.id}`}
               mutate_url={SCREEN_URI}
-              type="Screen"
+              message="Delete"
               name={data.payload.name}
               redirect={"/admin/screen"}
             />
@@ -160,6 +160,7 @@ const Screen = (props) => {
           delete={true}
         />
 
+        <h3>Screenings</h3>
         <ScreeningsTabs id={data.payload.id}/>
 
         <ErrorDisplayer error={error} />

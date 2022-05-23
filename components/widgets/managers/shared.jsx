@@ -90,8 +90,8 @@ export function Delete(props) {
 
     return (
         <>
-            <Button variant="danger" onClick={handleShow}>
-                Delete {props.type}
+            <Button variant="danger" onClick={handleShow} size={props.size ? props.size : "md"}>
+                {props.message}
             </Button>
 
             <Modal

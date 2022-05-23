@@ -8,7 +8,7 @@ import { ErrorDisplayer } from "../../../components/widgets/basic";
 import { Delete } from "../../../components/widgets/managers/shared";
 import { ScreeningCreateModal } from "../../../components/widgets/managers/screening";
 
-import { Card, Spinner, Alert } from "react-bootstrap";
+import { Table, Spinner, Button } from "react-bootstrap";
 
 // axios request urls
 const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screening";
@@ -17,29 +17,37 @@ const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screening";
 const Screening = (props) => {
   return (
     <>
-      <Card>
-        <Card.Header className="bg-success text-white">
-          <Link href={`/admin/screening/${props.info.id}`}>
-            <h4 className="d-inline">{props.info.time}</h4>
-          </Link>
-        </Card.Header>
+      <tr>
+        <td>{props.info.movie.title}</td>
+        <td>{props.info.movie.duration}</td>
+        <td>{props.info.screen.name}</td>
+        <td>{props.info.time}</td>
+        <td className="d-flex justify-content-end">
+          <div className="me-1">
+            <Link href={`/admin/screening/${props.info.id}`} passHref>
+              <Button variant="primary" size="sm">
+                View
+              </Button>
+            </Link>
+          </div>
 
-        <Card.Body>
-          {props.info.movie.title}
-          <br />
-          {props.info.screen.name}
-          <br />
-          {props.info.id}
-          <br />
-          <Delete
-            url={`${SCREENING_URI}/${props.info.id}`}
-            mutate_url={SCREENING_URI}
-            type="Screening"
-            name={props.info.movie.title}
-          />
-        </Card.Body>
-      </Card>
-      <br />
+          <div className="me-1">
+            <Button variant="warning" size="sm">
+              Edit
+            </Button>
+          </div>
+
+          <div className="me-1">
+            <Delete
+              url={`${SCREENING_URI}/${props.info.id}`}
+              mutate_url={SCREENING_URI}
+              message="Delete"
+              name={props.info.movie.title}
+              size="sm"
+            />
+          </div>
+        </td>
+      </tr>
     </>
   );
 };
@@ -58,13 +66,18 @@ const ScreeningList = (props) => {
       <>
         <ErrorDisplayer error={error} />
 
-        {data.payload.length > 0 ? (
-          FormedList
-        ) : (
-          <Alert variant="warning">
-            There are currently 0 screenings in the system.
-          </Alert>
-        )}
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Movie Title</th>
+              <th>Duration (Mins)</th>
+              <th>Screen Name</th>
+              <th>Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>{FormedList}</tbody>
+        </Table>
       </>
     );
   } else {
@@ -84,7 +97,7 @@ const ScreeningList = (props) => {
 export default function Main() {
   return (
     <Layout title="Admin Movies">
-      <h1 className="pt-4 mb-2 border-bottom">Screenings</h1>
+      <h1 className="pt-4 mb-2 border-bottom">Future Screenings</h1>
 
       <div className="d-flex">
         <div className="ml-auto my-auto">

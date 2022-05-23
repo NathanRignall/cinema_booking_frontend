@@ -7,7 +7,7 @@ import { fetcher } from "../../../components/common/functions";
 import { ErrorDisplayer } from "../../../components/widgets/basic";
 import { ScreenCreateModal } from "../../../components/widgets/managers/screen";
 
-import { Card, Spinner, Alert } from "react-bootstrap";
+import { Table, Spinner, Button } from "react-bootstrap";
 
 // axios request urls
 const SCREEN_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screen";
@@ -16,21 +16,31 @@ const SCREEN_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screen";
 const Screen = (props) => {
   return (
     <>
-      <Card>
-        <Card.Header className="bg-success text-white">
-          <Link href={`/admin/screen/${props.info.id}`} passHref>
-            <h4 className="d-inline">{props.info.name}</h4>
-          </Link>
-        </Card.Header>
+      <tr>
+        <td>{props.info.name}</td>
+        <td>{props.info.columns}</td>
+        <td className="d-flex justify-content-end">
+          <div className="me-1">
+            <Link href={`/admin/screen/${props.info.id}`} passHref>
+              <Button variant="primary" size="sm">
+                View
+              </Button>
+            </Link>
+          </div>
 
-        <Card.Body>
-          columns - {props.info.columns}
-          <br />
-          id - {props.info.id}
-          <br />
-        </Card.Body>
-      </Card>
-      <br />
+          <div className="me-1">
+            <Button variant="warning" size="sm">
+              Edit
+            </Button>
+          </div>
+
+          <div className="me-1">
+            <Button variant="danger" size="sm">
+              Delete
+            </Button>
+          </div>
+        </td>
+      </tr>
     </>
   );
 };
@@ -49,13 +59,16 @@ const ScreenList = (props) => {
       <>
         <ErrorDisplayer error={error} />
 
-        {data.payload.length > 0 ? (
-          FormedList
-        ) : (
-          <Alert variant="warning">
-            There are currently 0 screens in the system.
-          </Alert>
-        )}
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Screen Name</th>
+              <th>Screen Columns</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>{FormedList}</tbody>
+        </Table>
       </>
     );
   } else {

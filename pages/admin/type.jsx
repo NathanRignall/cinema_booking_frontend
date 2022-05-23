@@ -7,7 +7,7 @@ import { ErrorDisplayer } from "../../components/widgets/basic";
 import { Delete } from "../../components/widgets/managers/shared";
 import { TypeCreateModal } from "../../components/widgets/managers/type";
 
-import { Card, Spinner, Alert } from "react-bootstrap";
+import { Table, Spinner, Button } from "react-bootstrap";
 
 // axios request urls
 const TYPE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/type";
@@ -16,25 +16,27 @@ const TYPE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/type";
 const Type = (props) => {
   return (
     <>
-      <Card>
-        <Card.Header className="bg-secondary text-white">
-          <h4 className="d-inline">{props.info.name}</h4>
-        </Card.Header>
+      <tr>
+        <td>{props.info.name}</td>
+        <td>£{props.info.price / 100}</td>
+        <td className="d-flex justify-content-end">
+          <div className="me-1">
+            <Button variant="warning" size="sm">
+              Edit
+            </Button>
+          </div>
 
-        <Card.Body>
-          price - £{props.info.price /100}
-          <br />
-          id - {props.info.id}
-          <br />
-          <Delete
-            url={`${TYPE_URI}/${props.info.id}`}
-            mutate_url={TYPE_URI}
-            type="Type"
-            name={props.info.name}
-          />
-        </Card.Body>
-      </Card>
-      <br />
+          <div className="me-1">
+            <Delete
+              url={`${TYPE_URI}/${props.info.id}`}
+              mutate_url={TYPE_URI}
+              message="Delete"
+              name={props.info.name}
+              size="sm"
+            />
+          </div>
+        </td>
+      </tr>
     </>
   );
 };
@@ -51,15 +53,18 @@ const TypeList = (props) => {
 
     return (
       <>
-        <ErrorDisplayer error={error} />
+        <Table striped bordered>
+          <thead>
+            <tr>
+              <th>Seat Type</th>
+              <th>Price</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>{FormedList}</tbody>
+        </Table>
 
-        {data.payload.length > 0 ? (
-          FormedList
-        ) : (
-          <Alert variant="warning">
-            There are currently 0 types in the system.
-          </Alert>
-        )}
+        <ErrorDisplayer error={error} />
       </>
     );
   } else {

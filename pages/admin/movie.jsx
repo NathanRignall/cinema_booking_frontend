@@ -7,7 +7,7 @@ import { ErrorDisplayer } from "../../components/widgets/basic";
 import { Delete } from "../../components/widgets/managers/shared";
 import { MovieCreateModal } from "../../components/widgets/managers/movie";
 
-import { Card, Spinner, Alert } from "react-bootstrap";
+import { Spinner, Table, Button } from "react-bootstrap";
 
 // axios request urls
 const MOVIE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/movie";
@@ -16,25 +16,33 @@ const MOVIE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/movie";
 const Movie = (props) => {
   return (
     <>
-      <Card>
-        <Card.Header className="bg-secondary text-white">
-          <h4 className="d-inline">{props.info.title}</h4>
-        </Card.Header>
+      <tr>
+        <td>{props.info.title}</td>
+        <td>{props.info.duration}</td>
+        <td className="d-flex justify-content-end">
+          <div className="me-1">
+            <Button variant="primary" size="sm">
+              View
+            </Button>
+          </div>
 
-        <Card.Body>
-          duration - {props.info.duration}
-          <br />
-          id - {props.info.id}
-          <br />
-          <Delete
-            url={`${MOVIE_URI}/${props.info.id}`}
-            mutate_url={MOVIE_URI}
-            type="Movie"
-            name={props.info.title}
-          />
-        </Card.Body>
-      </Card>
-      <br />
+          <div className="me-1">
+            <Button variant="warning" size="sm">
+              Edit
+            </Button>
+          </div>
+
+          <div className="me-1">
+            <Delete
+              url={`${MOVIE_URI}/${props.info.id}`}
+              mutate_url={MOVIE_URI}
+              message="Delete"
+              name={props.info.title}
+              size="sm"
+            />
+          </div>
+        </td>
+      </tr>
     </>
   );
 };
@@ -51,15 +59,18 @@ const MovieList = (props) => {
 
     return (
       <>
-        <ErrorDisplayer error={error} />
+        <Table striped bordered>
+          <thead>
+            <tr>
+              <th>Movie Title</th>
+              <th>Duration (Mins)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>{FormedList}</tbody>
+        </Table>
 
-        {data.payload.length > 0 ? (
-          FormedList
-        ) : (
-          <Alert variant="warning">
-            There are currently 0 xxx in the system.
-          </Alert>
-        )}
+        <ErrorDisplayer error={error} />
       </>
     );
   } else {
