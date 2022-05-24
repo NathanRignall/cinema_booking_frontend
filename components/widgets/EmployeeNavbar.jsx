@@ -38,6 +38,10 @@ export default function EmployeeNavbar(props) {
           <Link href="/admin/type" passHref>
             <Nav.Link>Types</Nav.Link>
           </Link>
+
+          <Link href="/admin/stats" passHref>
+            <Nav.Link>Stats</Nav.Link>
+          </Link>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
