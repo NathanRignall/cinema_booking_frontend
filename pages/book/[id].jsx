@@ -1,6 +1,6 @@
 import Layout from "../../components/layouts/user";
 
-import React from "react";
+import React, { useState, useEffect} from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
@@ -12,6 +12,7 @@ import { Spinner, Button } from "react-bootstrap";
 
 // axios request urls
 const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/screening";
+const PROFILE_URI = process.env.NEXT_PUBLIC_API_URL + "/profile";
 
 // main screening loader
 const Screening = (props) => {
@@ -45,8 +46,10 @@ const Screening = (props) => {
           screeningId={data.payload.id}
           screen={data.payload.screen}
           edit={false}
-          selectable={true}
-          purchase={true}
+          selectable={false}
+          reservable={true}
+          purchase={false}
+          profiles={props.profiles}
         />
 
         <br />
@@ -71,9 +74,24 @@ export default function Main() {
   const router = useRouter();
   const { id } = router.query;
 
+  const { data, error } = useSWR(PROFILE_URI, fetcher, {
+    revalidateOnFocus: false,
+  });
+
+  const [ profiles, setProfiles ] = useState([]);
+
+  useEffect(() => {
+    if (data) {
+      setProfiles(data.payload);
+    }
+  }, [data]);
+
   return (
     <Layout title="Screening" active="screening">
-      {id != undefined ? <Screening id={id} router={router} /> : null}
+      {id != undefined ? (
+        <Screening id={id} router={router} profiles={profiles} />
+      ) : null}
+      <ErrorDisplayer error={error} />
     </Layout>
   );
 }

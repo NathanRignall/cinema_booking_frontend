@@ -8,7 +8,7 @@ import _ from "lodash";
 import { PurchaseCreateModal } from "../managers/purchase";
 import { SeatBulkDeleteModal } from "../managers/seat";
 
-import { Card, Button } from "react-bootstrap";
+import { Card, Button, Modal } from "react-bootstrap";
 
 // axios request urls
 const SCREEN_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screen";
@@ -32,6 +32,8 @@ export default class CinemaLayout extends React.PureComponent {
           occupied: item.occupied,
           selected: false,
           color: item.type.color,
+          price: item.type.price,
+          type: item.type.name,
         };
       }),
       layout: [],
@@ -42,6 +44,13 @@ export default class CinemaLayout extends React.PureComponent {
         show: false,
         error: false,
         message: "none",
+      },
+      add: false,
+      remove: false,
+      current: {
+        seatId: null,
+        price: null,
+        type: null,
       },
     };
     this.onLayoutChange = this.onLayoutChange.bind(this);
@@ -64,6 +73,8 @@ export default class CinemaLayout extends React.PureComponent {
             occupied: item.occupied,
             selected: false,
             color: item.type.color,
+            price: item.type.price,
+            type: item.type.name,
           };
         }),
       });
@@ -81,16 +92,18 @@ export default class CinemaLayout extends React.PureComponent {
         data-grid={item}
         style={itemStyle}
         onClick={
-          this.state.selectable ? this.selectSeat.bind(this, item.id) : null
+          this.state.selectable
+            ? this.selectSeat.bind(this, item.id)
+            : this.props.reservable
+            ? this.reserveSeat.bind(this, item.id, item.price, item.type)
+            : null
         }
         className={`${
-          item.selected & this.state.selectable
-            ? " border-dark border-3"
-            : null
+          item.selected & this.state.selectable ? " border-dark border-3" : null
         } ${item.occupied ? "opacity-25" : null} d-flex justify-content-center`}
       >
         <div className="align-self-center ">
-        <small>{item.name}</small>
+          <small>{item.name}</small>
         </div>
       </div>
     );
@@ -223,6 +236,41 @@ export default class CinemaLayout extends React.PureComponent {
     });
   }
 
+  reserveSeat(seatId, price, type) {
+    this.setState((state) => {
+      let add = false;
+      let remove = false;
+      let current = {
+        seatId: null,
+        price: null,
+        type: null,
+      };
+
+      state.items.map((item) => {
+        if (item.id == seatId) {
+          let newItem = item;
+          current = {
+            seatId: seatId,
+            price: price,
+            type: type,
+          };
+
+          if (!newItem.selected & !newItem.occupied) {
+            add = true;
+          } else {
+            remove = true;
+          }
+        }
+      });
+
+      return {
+        add,
+        remove,
+        current,
+      };
+    });
+  }
+
   clearSelected() {
     this.setState({ selected: [] });
   }
@@ -237,9 +285,93 @@ export default class CinemaLayout extends React.PureComponent {
     }
   }
 
+  closeAddModal() {
+    this.setState({
+      add: false,
+      current: {
+        seatId: null,
+        price: null,
+        type: null,
+      },
+    });
+  }
+
+  closeRemoveModal() {
+    this.setState({
+      remove: false,
+      current: {
+        seatId: null,
+        price: null,
+        type: null,
+      },
+    });
+  }
+
   render() {
     return (
       <div>
+        {this.props.reservable ? (
+          <>
+            <Modal
+              show={this.state.add}
+              backdrop="static"
+              size="lg"
+              centered={true}
+              keyboard={false}
+            >
+              <Modal.Header className="bg-dark text-white">
+                <Modal.Title>Choose Seat Type</Modal.Title>
+              </Modal.Header>
+
+              <Modal.Body>
+                {this.props.profiles.map((profile) => (
+                  <>
+                    {profile.name} {profile.price}{" "}
+                  </>
+                ))}
+                {this.state.current.type} {this.state.current.price}
+              </Modal.Body>
+
+              <Modal.Footer>
+                {/* Close Modal button*/}
+                <Button
+                  variant="secondary"
+                  onClick={this.closeAddModal.bind(this)}
+                >
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
+            <Modal
+              show={this.state.remove}
+              backdrop="static"
+              size="lg"
+              centered={true}
+              keyboard={false}
+            >
+              <Modal.Header className="bg-dark text-white">
+                <Modal.Title>Remove Seat</Modal.Title>
+              </Modal.Header>
+
+              <Modal.Body>Are you sure?</Modal.Body>
+
+              <Modal.Footer>
+                {/* Close Modal button*/}
+                <Button
+                  variant="secondary"
+                  onClick={this.closeRemoveModal.bind(this)}
+                >
+                  Close
+                </Button>
+
+                <Button type="submit" variant="danger">
+                  Remove
+                </Button>
+              </Modal.Footer>
+            </Modal>{" "}
+          </>
+        ) : null}
+
         <div className="d-flex pb-2 flex-row-reverse">
           {this.props.purchase ? (
             <div className="ms-2 d-inline">

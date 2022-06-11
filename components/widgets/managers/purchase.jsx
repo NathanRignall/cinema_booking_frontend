@@ -177,7 +177,7 @@ export const PurchaseCreateModal = (props) => {
 
   return (
     <>
-      <Button variant="outline-dark" onClick={handleShow} disabled={props.disabled}>
+      <Button variant="primary" onClick={handleShow} disabled={props.disabled}>
         Reserve Selected
       </Button>
 
