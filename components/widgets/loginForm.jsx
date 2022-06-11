@@ -27,7 +27,7 @@ export default function LoginForm(props) {
   let { destination_url } = router.query;
 
   if (destination_url == undefined) {
-    destination_url = "/";
+    destination_url = "/admin";
   }
 
   console.log(destination_url)
