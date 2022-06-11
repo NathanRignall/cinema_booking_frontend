@@ -9,7 +9,8 @@ import { Delete } from "../../../../components/widgets/managers/shared";
 import { ScreeningCreateModal } from "../../../../components/widgets/managers/screening";
 import SettingsNavbar from "../../../../components/widgets/SettingsNavbar";
 
-import { Table, Spinner, Button } from "react-bootstrap";
+import { Table, Spinner, Button, ButtonGroup } from "react-bootstrap";
+import { useState } from "react";
 
 // axios request urls
 const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screening";
@@ -29,7 +30,10 @@ const Screening = (props) => {
         <td>
           <div className="d-flex justify-content-end">
             <div className="me-1">
-              <Link href={`/admin/settings/screening/${props.info.id}`} passHref>
+              <Link
+                href={`/admin/settings/screening/${props.info.id}`}
+                passHref
+              >
                 <Button variant="primary" size="sm">
                   View
                 </Button>
@@ -60,7 +64,10 @@ const Screening = (props) => {
 
 // main list loader
 const ScreeningList = (props) => {
-  const { data, error } = useSWR(SCREENING_URI, fetcher);
+  const { data, error } = useSWR(
+    `${SCREENING_URI}?start=${props.startDate.toISOString()}&end=${props.endDate.toISOString()}`,
+    fetcher
+  );
 
   // check if data has loaded yet
   if (data) {
@@ -101,18 +108,70 @@ const ScreeningList = (props) => {
 
 // main app function
 export default function Main() {
+  const [startDate, setStartDate] = useState(() => {
+    let date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date;
+  });
+
+  const [endDate, setEndDate] = useState(() => {
+    let date = new Date();
+    date.setHours(0, 0, 0, 0);
+    date.setDate(date.getDate() + 7);
+    return date;
+  });
+
+  const setWeek = (weeks) => {
+    let start = new Date();
+    start.setHours(0, 0, 0, 0);
+    start.setDate(start.getDate() + weeks * 7);
+
+    let end = new Date();
+    end.setDate(start.getDate() + 7);
+
+    setStartDate(start);
+    setEndDate(end);
+  };
+
+  const setPast = () => {
+    setWeek(-2)
+  }
+
+  const setPrevious = () => {
+    setWeek(-1)
+  }
+
+  const setPresent = () => {
+    setWeek(0)
+  }
+
+  const setNext = () => {
+    setWeek(1)
+  }
+
+  const setFuture = () => {
+    setWeek(2)
+  }
+
   return (
     <Layout title="Admin Settings" active="settings">
-
       <SettingsNavbar active="screening" />
 
-      <div className="d-flex pb-2 justify-content-end">
-        <div className="ml-auto my-auto">
+      <div className="d-flex pb-2">
+        <div className="flex-grow-1">
+
+            <Button onClick={setPast} variant="secondary" className="me-1">Past</Button>
+            <Button onClick={setPrevious} variant="secondary" className="me-1">Previous</Button>
+            <Button onClick={setPresent} variant="secondary" className="me-1">Present</Button>
+            <Button onClick={setNext} variant="secondary" className="me-1">Next</Button>
+        </div>
+
+        <div>
           <ScreeningCreateModal />
         </div>
       </div>
 
-      <ScreeningList />
+      <ScreeningList startDate={startDate} endDate={endDate} />
     </Layout>
   );
 }
