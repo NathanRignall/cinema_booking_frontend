@@ -30,6 +30,8 @@ export default function LoginForm(props) {
     destination_url = "/";
   }
 
+  console.log(destination_url)
+
   // satus of the form requests
   const [serverState, setServerState] = useState({
     show: false,

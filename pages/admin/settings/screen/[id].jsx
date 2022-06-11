@@ -1,17 +1,17 @@
-import Layout from "../../../components/layouts/employee";
+import Layout from "../../../../components/layouts/employee";
 
 import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
-import { fetcher } from "../../../components/common/functions";
-import { ErrorDisplayer } from "../../../components/widgets/basic";
-import { Delete } from "../../../components/widgets/managers/shared";
-import CinemaLayout from "../../../components/widgets/CinemaLayout";
+import { fetcher } from "../../../../components/common/functions";
+import { ErrorDisplayer } from "../../../../components/widgets/basic";
+import { Delete } from "../../../../components/widgets/managers/shared";
+import CinemaLayout from "../../../../components/widgets/CinemaLayout";
 
 import { Table, Tabs, Tab, Spinner, Button } from "react-bootstrap";
-import { SeatBulkCreateModal } from "../../../components/widgets/managers/seat";
+import { SeatBulkCreateModal } from "../../../../components/widgets/managers/seat";
 
 // axios request urls
 const SCREEN_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screen";
@@ -139,6 +139,8 @@ function ScreeningsTabs(props) {
 
 // main list loader
 const Screen = (props) => {
+  const router = useRouter();
+  
   const { data, error } = useSWR(`${SCREEN_URI}/${props.id}`, fetcher);
 
   // check if data has loaded yet
@@ -149,7 +151,16 @@ const Screen = (props) => {
     return (
       <>
         <h1 className="pt-4 mb-2 border-bottom">
-          {data.payload.name}
+         
+
+          <div className="d-flex">
+            <div className="flex-grow-1"> {data.payload.name}</div>{" "}
+            <div>
+              <Button onClick={() => router.back()} variant="secondary">
+                Back
+              </Button>
+            </div>
+          </div>
 
           <p className="lead mb-2">
             {data.payload.columns} Columns - {data.payload.seats.length} Total
@@ -217,7 +228,7 @@ export default function Main() {
   const { id } = router.query;
 
   return (
-    <Layout title="Admin Screens ID">
+    <Layout title="Admin Settings" active="settings">
       {id != undefined ? <Screen id={id} /> : null}
     </Layout>
   );

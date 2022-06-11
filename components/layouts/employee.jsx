@@ -29,14 +29,14 @@ const Layout = (props) => {
       // some sort of error so push to login
       router.push({
         pathname: "/admin/login",
-        query: { url: window.location.pathname },
+        query: { destination_url: window.location.pathname },
       });
       return <Loader />;
     } else {
       return (
         <AppWrapper data={data.payload}>
           <div>
-            <EmployeeNavbar  info={data.payload} />
+            <EmployeeNavbar  info={data.payload} active={props.active}/>
 
             <Container>{props.children}</Container>
           </div>
@@ -47,7 +47,7 @@ const Layout = (props) => {
     if (error) {
       router.push({
         pathname: "/admin/login",
-        query: { url: window.location.pathname },
+        query: { destination_url: window.location.pathname },
       });
       return <Loader />;
     } else {

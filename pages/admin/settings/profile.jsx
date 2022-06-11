@@ -1,11 +1,12 @@
-import Layout from "../../components/layouts/employee";
+import Layout from "../../../components/layouts/employee";
 
 import useSWR from "swr";
 
-import { fetcher } from "../../components/common/functions";
-import { ErrorDisplayer } from "../../components/widgets/basic";
-import { Delete } from "../../components/widgets/managers/shared";
-import { ProfileCreateModal } from "../../components/widgets/managers/profile";
+import { fetcher } from "../../../components/common/functions";
+import { ErrorDisplayer } from "../../../components/widgets/basic";
+import { Delete } from "../../../components/widgets/managers/shared";
+import { ProfileCreateModal } from "../../../components/widgets/managers/profile";
+import SettingsNavbar from "../../../components/widgets/SettingsNavbar";
 
 import { Table, Spinner, Button } from "react-bootstrap";
 
@@ -85,16 +86,15 @@ const ProfileList = (props) => {
 // main app function
 export default function Main() {
   return (
-    <Layout title="Admin Profile">
-      <h1 className="pt-4 mb-2 border-bottom">Profiles</h1>
+    <Layout title="Admin Settings" active="settings">
+      <SettingsNavbar active="profile" />
 
-      <div className="d-flex">
+      <div className="d-flex pb-2 justify-content-end">
         <div className="ml-auto my-auto">
           <ProfileCreateModal />
         </div>
       </div>
 
-      <br />
       <ProfileList />
     </Layout>
   );

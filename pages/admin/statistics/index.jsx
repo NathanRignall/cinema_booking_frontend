@@ -272,8 +272,8 @@ const StatsTest = (props) => {
 // main app function
 export default function Main() {
   return (
-    <Layout title="Stats Test">
-      <h1 className="pt-4 mb-2 border-bottom">Stats Test</h1>
+    <Layout title="Stats Test" active="statistics">
+      <h1 className="pt-4 mb-2 border-bottom">Statistics</h1>
 
       <br />
       <StatsTest />

@@ -1,11 +1,12 @@
-import Layout from "../../components/layouts/employee";
+import Layout from "../../../components/layouts/employee";
 
 import useSWR from "swr";
 
-import { fetcher } from "../../components/common/functions";
-import { ErrorDisplayer } from "../../components/widgets/basic";
-import { Delete } from "../../components/widgets/managers/shared";
-import { TypeCreateModal } from "../../components/widgets/managers/type";
+import { fetcher } from "../../../components/common/functions";
+import { ErrorDisplayer } from "../../../components/widgets/basic";
+import { Delete } from "../../../components/widgets/managers/shared";
+import { TypeCreateModal } from "../../../components/widgets/managers/type";
+import SettingsNavbar from "../../../components/widgets/SettingsNavbar";
 
 import { Table, Spinner, Button } from "react-bootstrap";
 
@@ -85,16 +86,14 @@ const TypeList = (props) => {
 // main app function
 export default function Main() {
   return (
-    <Layout title="Admin Type">
-      <h1 className="pt-4 mb-2 border-bottom">Types</h1>
+    <Layout title="Admin Settings" active="settings">
+      <SettingsNavbar active="type" />
 
-      <div className="d-flex">
+      <div className="d-flex pb-2 justify-content-end">
         <div className="ml-auto my-auto">
           <TypeCreateModal />
         </div>
       </div>
-
-      <br />
 
       <TypeList />
     </Layout>

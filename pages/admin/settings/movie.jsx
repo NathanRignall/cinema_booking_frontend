@@ -1,11 +1,12 @@
-import Layout from "../../components/layouts/employee";
+import Layout from "../../../components/layouts/employee";
 
 import useSWR from "swr";
 
-import { fetcher } from "../../components/common/functions";
-import { ErrorDisplayer } from "../../components/widgets/basic";
-import { Delete } from "../../components/widgets/managers/shared";
-import { MovieCreateModal } from "../../components/widgets/managers/movie";
+import { fetcher } from "../../../components/common/functions";
+import { ErrorDisplayer } from "../../../components/widgets/basic";
+import { Delete } from "../../../components/widgets/managers/shared";
+import { MovieCreateModal } from "../../../components/widgets/managers/movie";
+import SettingsNavbar from "../../../components/widgets/SettingsNavbar";
 
 import { Spinner, Table, Button } from "react-bootstrap";
 
@@ -21,11 +22,11 @@ const Movie = (props) => {
         <td>{props.info.duration}</td>
         <td>
           <div className="d-flex justify-content-end">
-            <div className="me-1">
+            {/* <div className="me-1">
               <Button variant="primary" size="sm">
                 View
               </Button>
-            </div>
+            </div> */}
 
             <div className="me-1">
               <Button variant="warning" size="sm">
@@ -91,16 +92,15 @@ const MovieList = (props) => {
 // main app function
 export default function Main() {
   return (
-    <Layout title="Admin Movies">
-      <h1 className="pt-4 mb-2 border-bottom">Movies</h1>
+    <Layout title="Admin Settings" active="settings">
+      <SettingsNavbar active="movie" />
 
-      <div className="d-flex">
+      <div className="d-flex pb-2 justify-content-end">
         <div className="ml-auto my-auto">
           <MovieCreateModal />
         </div>
       </div>
 
-      <br />
       <MovieList />
     </Layout>
   );

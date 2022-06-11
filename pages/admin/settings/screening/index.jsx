@@ -1,12 +1,13 @@
-import Layout from "../../../components/layouts/employee";
+import Layout from "../../../../components/layouts/employee";
 
 import Link from "next/link";
 import useSWR from "swr";
 
-import { fetcher } from "../../../components/common/functions";
-import { ErrorDisplayer } from "../../../components/widgets/basic";
-import { Delete } from "../../../components/widgets/managers/shared";
-import { ScreeningCreateModal } from "../../../components/widgets/managers/screening";
+import { fetcher } from "../../../../components/common/functions";
+import { ErrorDisplayer } from "../../../../components/widgets/basic";
+import { Delete } from "../../../../components/widgets/managers/shared";
+import { ScreeningCreateModal } from "../../../../components/widgets/managers/screening";
+import SettingsNavbar from "../../../../components/widgets/SettingsNavbar";
 
 import { Table, Spinner, Button } from "react-bootstrap";
 
@@ -28,7 +29,7 @@ const Screening = (props) => {
         <td>
           <div className="d-flex justify-content-end">
             <div className="me-1">
-              <Link href={`/admin/screening/${props.info.id}`} passHref>
+              <Link href={`/admin/settings/screening/${props.info.id}`} passHref>
                 <Button variant="primary" size="sm">
                   View
                 </Button>
@@ -101,16 +102,16 @@ const ScreeningList = (props) => {
 // main app function
 export default function Main() {
   return (
-    <Layout title="Admin Movies">
-      <h1 className="pt-4 mb-2 border-bottom">Future Screenings</h1>
+    <Layout title="Admin Settings" active="settings">
 
-      <div className="d-flex">
+      <SettingsNavbar active="screening" />
+
+      <div className="d-flex pb-2 justify-content-end">
         <div className="ml-auto my-auto">
           <ScreeningCreateModal />
         </div>
       </div>
 
-      <br />
       <ScreeningList />
     </Layout>
   );
