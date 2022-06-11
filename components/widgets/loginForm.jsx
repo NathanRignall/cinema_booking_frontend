@@ -30,7 +30,7 @@ export default function LoginForm(props) {
     destination_url = "/admin";
   }
 
-  console.log(destination_url)
+  console.log(destination_url);
 
   // satus of the form requests
   const [serverState, setServerState] = useState({
@@ -102,65 +102,89 @@ export default function LoginForm(props) {
       onSubmit={handleOnSubmit}
       initialValues={{ email: "", password: "" }}
     >
-      {({ handleSubmit, handleChange, values, errors, isSubmitting }) => (
+      {({
+        handleSubmit,
+        handleChange,
+        values,
+        errors,
+        touched,
+        isSubmitting,
+      }) => (
         <Form noValidate onSubmit={handleSubmit}>
           {/* email group */}
-          <Form.Group controlId="validationFormik01">
+          <Form.Group
+            controlId="validationFormik01"
+            className="position-relative"
+          >
             <Form.Control
               type="email"
               name="email"
               placeholder="Enter Email"
               value={values.email}
               onChange={handleChange}
-              isInvalid={errors.email}
+              isInvalid={touched.email && errors.email}
               autoComplete="email"
+              size="lg"
             />
 
-            <Form.Control.Feedback type="invalid">
+            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            <Form.Control.Feedback tooltip type="invalid">
               {errors.email}
             </Form.Control.Feedback>
           </Form.Group>
 
+          <br />
+
           {/* password group */}
-          <Form.Group controlId="validationFormik02">
+          <Form.Group
+            controlId="validationFormik02"
+            className="position-relative"
+          >
             <Form.Control
               type="password"
               name="password"
               placeholder="Enter Password"
               value={values.password}
               onChange={handleChange}
-              isInvalid={errors.password}
+              isInvalid={touched.password && errors.password}
               autoComplete="current-password"
+              size="lg"
             />
 
-            <Form.Control.Feedback type="invalid">
+            <Form.Control.Feedback tooltip type="invalid">
               {errors.password}
             </Form.Control.Feedback>
           </Form.Group>
 
-          {/* display errors to the user */}
-          {serverState.show && (
-            <Alert variant={!serverState.error ? "warning" : "danger"}>
-              {serverState.message}
-            </Alert>
-          )}
+          <br />
 
           {/* Submit button*/}
           {isSubmitting ? (
-            <Button type="submit" disabled>
+            <Button className="w-100" type="submit " size="lg" disabled variant={props.employee ? "primary" : "dark"}>
               <Spinner
                 as="span"
                 animation="border"
                 size="sm"
                 role="status"
                 aria-hidden="true"
-                className="mr-2"
               />
               Loading...
             </Button>
           ) : (
-            <Button type="submit">Login</Button>
+            <Button className="w-100" type="submit " size="lg" variant={props.employee ? "primary" : "dark"}>
+              Login
+            </Button>
           )}
+
+          <div style={{ minHeight: " 4.5rem", paddingTop: "10px"}}>
+
+            {/* display errors to the user */}
+            {serverState.show && (
+              <Alert variant={!serverState.error ? "warning" : "danger"}>
+                {serverState.message}
+              </Alert>
+            )}
+          </div>
         </Form>
       )}
     </Formik>

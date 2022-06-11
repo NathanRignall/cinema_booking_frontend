@@ -1,4 +1,4 @@
-import { useAppContext } from "../context/state";
+import { useAppContext } from "../../context/state";
 
 import Link from "next/link";
 
@@ -9,7 +9,13 @@ export default function EmployeeNavbar(props) {
   const context = useAppContext();
 
   return (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" className="px-5">
+    <Navbar
+      collapseOnSelect
+      expand="lg"
+      bg="dark"
+      variant="dark"
+      className="px-5"
+    >
       <Link href="/" passHref>
         <Navbar.Brand>XL Cinima</Navbar.Brand>
       </Link>
@@ -38,7 +44,7 @@ export default function EmployeeNavbar(props) {
         </Nav>
 
         <Nav>
-          <Dropdown >
+          <Dropdown>
             <Dropdown.Toggle variant="outline-light" id="dropdown-basic" block>
               User Account
             </Dropdown.Toggle>

@@ -8,15 +8,18 @@ import { Container } from "react-bootstrap";
 // main app function
 export default function Main() {
   return (
-    <Layout title="Login">
-      <Container>
-        <h2>Login</h2>
-        <p>Please fill in your credentials to login.</p>
+    <Layout title="Admin Login">
+      <main className="d-flex h-100">
+        <div className="form-signin w-100 m-auto">
+          <div className="text-center">
+            <h1 className="mb-3 fw-normal">Please Login (Admin)</h1>
+          </div>
 
-        {/* Load the form component */}
-        <LoginForm employee={true} />
+          {/* Load the form component */}
+          <LoginForm employee={true} />
 
-      </Container>
+        </div>
+      </main>
     </Layout>
   );
 }

@@ -42,7 +42,7 @@ const MovieSelector = (props) => {
   const handleSearch = (query) => {
     // make the axios request for search
     axios
-      .get(`${MOVIE_URI}/find?find=${query}`, {
+      .get(`${MOVIE_URI}/find?title=${query}`, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
       })

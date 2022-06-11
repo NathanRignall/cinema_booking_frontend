@@ -4,6 +4,15 @@ html {
     height: 100%;
 }
 
+#__next {
+    height: 100vh;
+}
+
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+}
+
 .alert-fixed {
     position: fixed;
     bottom: 0px;
