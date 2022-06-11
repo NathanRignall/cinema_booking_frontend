@@ -1,14 +1,15 @@
-import Layout from "../components/layouts/anonymous";
+import Layout from "../../components/layouts/anonymous";
 
 import useSWR from "swr";
+import Link from "next/link";
 
-import { fetcher } from "../components/common/functions";
-import { ErrorDisplayer } from "../components/widgets/basic";
+import { fetcher } from "../../components/common/functions";
+import { ErrorDisplayer } from "../../components/widgets/basic";
 
 import { Spinner, Card, Col, Row, Nav, Button} from "react-bootstrap";
 
 // axios request urls
-const MOVIE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/movie";
+const MOVIE_URI = process.env.NEXT_PUBLIC_API_URL + "/movie";
 
 // movie Card
 const Movie = (props) => {
@@ -21,8 +22,11 @@ const Movie = (props) => {
         />
         <Card.Body>
           <Card.Title>{props.info.title}</Card.Title>
-          {props.info.description}<br/>
-          <Button variant="outline-dark">Book Movie</Button>
+          <Link href={`/movie/${props.info.id}`} passHref>
+                <Button variant="outline-dark">
+                View Screenings
+                </Button>
+              </Link>
         </Card.Body>
       </Card>
       <br />

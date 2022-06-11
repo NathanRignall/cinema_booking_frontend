@@ -127,7 +127,7 @@ export default function Main() {
     start.setDate(start.getDate() + weeks * 7);
 
     let end = new Date();
-    start.setHours(0, 0, 0, 0);
+    end.setHours(0, 0, 0, 0);
     end.setDate(end.getDate() + weeks * 7 + 7);
 
     setStartDate(start);

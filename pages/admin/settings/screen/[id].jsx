@@ -114,7 +114,7 @@ function ScreeningsTabs(props) {
     <Tab
       key={index}
       eventKey={index}
-      title={date.toLocaleDateString("en", {
+      title={date.toLocaleDateString("en-UK", {
         month: "2-digit",
         day: "numeric",
       })}

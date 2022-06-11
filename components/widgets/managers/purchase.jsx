@@ -177,7 +177,7 @@ export const PurchaseCreateModal = (props) => {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow} disabled={props.disabled}>
+      <Button variant="outline-dark" onClick={handleShow} disabled={props.disabled}>
         Reserve Selected
       </Button>
 
@@ -199,7 +199,7 @@ export const PurchaseCreateModal = (props) => {
         >
           {({ handleSubmit, handleChange, values, errors, isSubmitting }) => (
             <Form noValidate onSubmit={handleSubmit}>
-              <Modal.Header className="bg-success text-white">
+              <Modal.Header className="bg-dark text-white">
                 <Modal.Title>Reserve {props.seatIds.length} Seats</Modal.Title>
               </Modal.Header>
 
@@ -243,7 +243,7 @@ export const PurchaseCreateModal = (props) => {
                     Loading...
                   </Button>
                 ) : (
-                  <Button type="submit">Reserve</Button>
+                  <Button type="submit" variant="dark">Reserve</Button>
                 )}
               </Modal.Footer>
             </Form>

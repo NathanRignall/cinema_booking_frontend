@@ -85,12 +85,12 @@ export default class CinemaLayout extends React.PureComponent {
         }
         className={`${
           item.selected & this.state.selectable
-            ? "border border-primary border-4"
+            ? " border-dark border-3"
             : null
         } ${item.occupied ? "opacity-25" : null} d-flex justify-content-center`}
       >
-        <div className="align-self-center text-bold">
-          <b>{item.name}</b>
+        <div className="align-self-center ">
+        <small>{item.name}</small>
         </div>
       </div>
     );
