@@ -13,10 +13,8 @@ import { Container } from "react-bootstrap";
 const Layout = (props) => {
   return (
     <div>
-      <Container>
-        <Navbar active={props.active}/>
-        {props.children}
-      </Container>
+      <Navbar active={props.active} />
+      <Container>{props.children}</Container>
     </div>
   );
 };

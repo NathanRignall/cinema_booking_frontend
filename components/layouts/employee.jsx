@@ -16,7 +16,7 @@ const Layout = (props) => {
 
   // setup api connection
   const { data, error } = useSWR(
-    process.env.NEXT_PUBLIC_API_URL + "/employee",
+    process.env.NEXT_PUBLIC_API_URL + "/admin/session",
     fetcher,
     {
       revalidateOnFocus: false,

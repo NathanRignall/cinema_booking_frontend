@@ -9,7 +9,7 @@ import { Form, Button, Spinner, Alert } from "react-bootstrap";
 
 // axios request urls
 const SESSION_URI = process.env.NEXT_PUBLIC_API_URL + "/session";
-const EMPLOYEE_URI = process.env.NEXT_PUBLIC_API_URL + "/employee";
+const EMPLOYEE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/session";
 
 // form schema
 const schema = yup.object().shape({

@@ -12,7 +12,7 @@ export default function Main() {
     const router = useRouter();
 
     const { data, error } = useSWR(
-        process.env.NEXT_PUBLIC_API_URL + "/employee/logout",
+        process.env.NEXT_PUBLIC_API_URL + "/admin/session/logout",
         fetcher,
         {
             revalidateOnFocus: false,

@@ -29,7 +29,7 @@ const Screening = (props) => {
       <td>
           <div className="d-flex justify-content-end">
             <div className="me-1">
-              <Link href={`/admin/screening/${props.id}`} passHref>
+              <Link href={`/admin/settings/screening/${props.id}`} passHref>
                 <Button variant="primary" size="sm">
                   View
                 </Button>
