@@ -5,7 +5,10 @@ import axios from "axios";
 import RGL, { WidthProvider } from "react-grid-layout";
 import _ from "lodash";
 
-import { PurchaseCreateModal } from "../managers/purchase";
+import {
+  PurchaseAdminCreateModal,
+  PurchaseUserCreateModal,
+} from "../managers/purchase";
 import { SeatBulkDeleteModal } from "../managers/seat";
 
 import { Card, Button, Modal } from "react-bootstrap";
@@ -48,10 +51,13 @@ export default class CinemaLayout extends React.PureComponent {
       add: false,
       remove: false,
       current: {
+        name: null,
         seatId: null,
         price: null,
         type: null,
       },
+      basket: [],
+      total: 0,
     };
     this.onLayoutChange = this.onLayoutChange.bind(this);
     this.clearSelected = this.clearSelected.bind(this);
@@ -95,12 +101,18 @@ export default class CinemaLayout extends React.PureComponent {
           this.state.selectable
             ? this.selectSeat.bind(this, item.id)
             : this.props.reservable
-            ? this.reserveSeat.bind(this, item.id, item.price, item.type)
+            ? this.actionSeat.bind(
+                this,
+                item.name,
+                item.id,
+                item.price,
+                item.type
+              )
             : null
         }
-        className={`${
-          item.selected & this.state.selectable ? " border-dark border-3" : null
-        } ${item.occupied ? "opacity-25" : null} d-flex justify-content-center`}
+        className={`${item.selected ? " border-dark border-3" : null} ${
+          item.occupied ? "opacity-25" : null
+        } d-flex justify-content-center`}
       >
         <div className="align-self-center ">
           <small>{item.name}</small>
@@ -236,11 +248,12 @@ export default class CinemaLayout extends React.PureComponent {
     });
   }
 
-  reserveSeat(seatId, price, type) {
+  actionSeat(name, seatId, price, type) {
     this.setState((state) => {
       let add = false;
       let remove = false;
       let current = {
+        name: null,
         seatId: null,
         price: null,
         type: null,
@@ -250,6 +263,7 @@ export default class CinemaLayout extends React.PureComponent {
         if (item.id == seatId) {
           let newItem = item;
           current = {
+            name: name,
             seatId: seatId,
             price: price,
             type: type,
@@ -271,8 +285,93 @@ export default class CinemaLayout extends React.PureComponent {
     });
   }
 
+  addBasketSeat(name, seatId, profile, profileId, price, type) {
+    let add = false;
+
+    this.setState((state) => {
+      const selected = [];
+      const basket = this.state.basket;
+
+      const items = state.items.map((item) => {
+        if (item.id == seatId) {
+          let newItem = item;
+
+          selected.push(seatId);
+          basket.push({
+            name: name,
+            seatId: seatId,
+            profile: profile,
+            profileId: profileId,
+            price: price,
+            type: type,
+          });
+
+          newItem.selected = true;
+          return newItem;
+        } else {
+          if (item.selected == true) {
+            selected.push(item.id);
+          }
+          return item;
+        }
+      });
+
+      let total = 0;
+
+      this.state.basket.map((item) => {
+        total = total + item.price;
+      });
+
+      return {
+        add,
+        items,
+        selected,
+        basket,
+        total,
+      };
+    });
+  }
+
+  removeBasketSeat(seatId, profileId, price) {
+    let add = false;
+
+    console.log(seatId);
+
+    this.setState((state) => {
+      const selected = [];
+      const basket = this.state.basket;
+
+      const items = state.items.map((item) => {
+        if (item.id == seatId) {
+          let newItem = item;
+
+          selected.push(seatId);
+          basket.push({
+            seatId: seatId,
+            profileId: profileId,
+            price: price,
+          });
+
+          newItem.selected = true;
+          return newItem;
+        } else {
+          if (item.selected == true) {
+            selected.push(item.id);
+          }
+          return item;
+        }
+      });
+
+      return {
+        add,
+        items,
+        selected,
+      };
+    });
+  }
+
   clearSelected() {
-    this.setState({ selected: [] });
+    this.setState({ selected: [], total: 0, basket: [] });
   }
 
   toggleEdit() {
@@ -288,22 +387,12 @@ export default class CinemaLayout extends React.PureComponent {
   closeAddModal() {
     this.setState({
       add: false,
-      current: {
-        seatId: null,
-        price: null,
-        type: null,
-      },
     });
   }
 
   closeRemoveModal() {
     this.setState({
       remove: false,
-      current: {
-        seatId: null,
-        price: null,
-        type: null,
-      },
     });
   }
 
@@ -315,7 +404,7 @@ export default class CinemaLayout extends React.PureComponent {
             <Modal
               show={this.state.add}
               backdrop="static"
-              size="lg"
+              size="md"
               centered={true}
               keyboard={false}
             >
@@ -324,12 +413,42 @@ export default class CinemaLayout extends React.PureComponent {
               </Modal.Header>
 
               <Modal.Body>
-                {this.props.profiles.map((profile) => (
-                  <>
-                    {profile.name} {profile.price}{" "}
-                  </>
-                ))}
-                {this.state.current.type} {this.state.current.price}
+                <h3 className=" mb-2 border-bottom">
+                  Seat - {this.state.current.name}
+                  <p className="lead mb-2">{this.state.current.type}</p>
+                </h3>
+
+                <br />
+
+                {this.props.profiles.map((profile) => {
+                  let price =
+                    ((profile.price / 100) * this.state.current.price) / 100;
+
+                  return (
+                    <Button
+                      key={price}
+                      size="lg"
+                      variant="outline-dark"
+                      className="w-100 mb-2"
+                      onClick={this.addBasketSeat.bind(
+                        this,
+                        this.state.current.name,
+                        this.state.current.seatId,
+                        profile.name,
+                        profile.id,
+                        price,
+                        this.state.current.type,
+                      )}
+                    >
+                      <div className="d-flex">
+                        <div className="flex-grow-1 text-start">
+                          {profile.name}
+                        </div>
+                        <div>£{price.toFixed(2)}</div>
+                      </div>
+                    </Button>
+                  );
+                })}
               </Modal.Body>
 
               <Modal.Footer>
@@ -375,11 +494,24 @@ export default class CinemaLayout extends React.PureComponent {
         <div className="d-flex pb-2 flex-row-reverse">
           {this.props.purchase ? (
             <div className="ms-2 d-inline">
-              <PurchaseCreateModal
+              <PurchaseAdminCreateModal
                 screeningId={this.props.screeningId}
                 seatIds={this.state.selected}
                 disabled={this.state.selected.length == 0}
               />
+            </div>
+          ) : null}
+
+          {this.props.reservable ? (
+            <div className="ms-2 d-inline">
+              <PurchaseUserCreateModal
+                screeningId={this.props.screeningId}
+                basket={this.state.basket}
+                total={this.state.total}
+                disabled={this.state.selected.length == 0}
+              >
+                Checkout - £{this.state.total.toFixed(2)}
+              </PurchaseUserCreateModal>
             </div>
           ) : null}
 

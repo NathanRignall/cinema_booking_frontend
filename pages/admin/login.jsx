@@ -2,7 +2,7 @@ import Layout from "../../components/layouts/basic";
 
 import LoginForm from "../../components/widgets/loginForm";
 
-import { Container } from "react-bootstrap";
+import { Badge, Container } from "react-bootstrap";
 
 
 // main app function
@@ -11,8 +11,9 @@ export default function Main() {
     <Layout title="Admin Login">
       <main className="d-flex h-100">
         <div className="form-signin w-100 m-auto">
-          <div className="text-center">
-            <h1 className="mb-3 fw-normal">Please Login (Admin)</h1>
+          <div className="text-center mb-3 ">
+            <h1 className="fw-normal">Please Login </h1>
+            <h3><Badge>Admin</Badge></h3>
           </div>
 
           {/* Load the form component */}

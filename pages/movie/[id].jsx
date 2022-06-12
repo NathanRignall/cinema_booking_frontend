@@ -46,11 +46,8 @@ const Screening = (props) => {
             })}
           </Card.Text>
 
-
           <Link href={`/book/${props.info.id}`} passHref>
-            <Button variant="outline-dark" >
-              Book
-            </Button>
+            <Button variant="outline-dark">Book</Button>
           </Link>
         </Card.Body>
       </Card>

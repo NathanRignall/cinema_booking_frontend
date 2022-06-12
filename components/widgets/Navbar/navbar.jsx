@@ -11,11 +11,11 @@ const Navbar = (props) => {
   return (
     <div className="border-bottom mb-4">
       <Container>
-        <div className="d-flex py-3  ">
-          <div className="flex-grow-1 d-flex align-items-center">
+        <div className="d-md-flex py-3  ">
+          <div className="flex-grow-1 d-flex align-items-center justify-content-center justify-content-md-start pt-2">
             <span className="fs-4 text-dark">XL Cinema</span>
           </div>
-          <div>
+          <div className="d-flex align-items-center justify-content-center pt-2">
             <Nav>
               <Nav.Item>
                 <Link href="/" passHref>

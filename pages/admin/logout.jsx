@@ -21,14 +21,14 @@ export default function Main() {
 
     if (data) {
         // okay push back to login page
-        router.push("/admin/login");
+        router.push("/");
         return <Loader />;
     } else {
         if (error) {
             // check if a not logged in error
             if (error.status == 401) {
                 // not logged in
-                router.push("/admin/login");
+                router.push("/");
                 return <Loader />;
             } else {
                 // error that can't be ignored
