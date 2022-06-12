@@ -95,7 +95,7 @@ export function Delete(props) {
         </Modal.Header>
 
         <Modal.Body>
-          Are you sure you would like to delete &quot;{props.name}&quot;?
+          Are you sure you would like to delete {props.name}?
           <div className="pt-2">
             {/* display errors to the user */}
             {serverState.show && (

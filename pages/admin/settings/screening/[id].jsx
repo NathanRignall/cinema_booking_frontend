@@ -43,9 +43,9 @@ const Screening = (props) => {
         </h1>
 
         <div>
-          <div className="me-2 d-inline">
+          {/* <div className="me-2 d-inline">
             <Button variant="warning">Edit</Button>
-          </div>
+          </div> */}
 
           <div className="me-2 d-inline">
             <Delete
@@ -53,7 +53,7 @@ const Screening = (props) => {
               mutate_url={SCREENING_URI}
               message="Delete"
               name={`${data.payload.movie.title} Screening`}
-              redirect={"/admin/screening"}
+              redirect={"/admin/settings/screening"}
             />
           </div>
         </div>

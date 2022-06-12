@@ -28,7 +28,7 @@ const PURCHASE_USER_URI = process.env.NEXT_PUBLIC_API_URL + "/purchase";
 
 // create schema
 const schemaCreate = yup.object().shape({
-  profileId: yup.string().required(),
+  profileId: yup.string().required("Enter Profile"),
 });
 
 // profile selector component

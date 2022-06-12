@@ -9,7 +9,7 @@ import { Delete } from "../../../../components/widgets/managers/shared";
 import { ScreeningCreateModal } from "../../../../components/widgets/managers/screening";
 import SettingsNavbar from "../../../../components/widgets/SettingsNavbar";
 
-import { Table, Spinner, Button, ButtonGroup } from "react-bootstrap";
+import { Table, Spinner, Button, Tab, Tabs } from "react-bootstrap";
 import { useState } from "react";
 
 // axios request urls
@@ -25,7 +25,7 @@ const Screening = (props) => {
       <tr>
         <td>{props.info.movie.title}</td>
         <td>{props.info.movie.duration}</td>
-        <td>{props.info.screen.name}</td>
+        <td>{props.info.screen ? props.info.screen.name : "NULL"}</td>
         <td>{dateString}</td>
         <td>
           <div className="d-flex justify-content-end">
@@ -39,17 +39,17 @@ const Screening = (props) => {
                 </Button>
               </Link>
             </div>
-
+{/* 
             <div className="me-1">
               <Button variant="warning" size="sm">
                 Edit
               </Button>
-            </div>
+            </div> */}
 
             <div className="me-1">
-              <Delete
+            <Delete
                 url={`${SCREENING_URI}/${props.info.id}`}
-                mutate_url={SCREENING_URI}
+                mutate_url={`${SCREENING_URI}?start=${props.startDate}&end=${props.endDate}`}
                 message="Delete"
                 name={`${props.info.movie.title} Screening`}
                 size="sm"
@@ -65,14 +65,14 @@ const Screening = (props) => {
 // main list loader
 const ScreeningList = (props) => {
   const { data, error } = useSWR(
-    `${SCREENING_URI}?start=${props.startDate.toISOString()}&end=${props.endDate.toISOString()}`,
+    `${SCREENING_URI}?start=${props.startDate}&end=${props.endDate}`,
     fetcher
   );
 
   // check if data has loaded yet
   if (data) {
     const FormedList = data.payload.map((item) => (
-      <Screening key={item.id} info={item} />
+      <Screening key={item.id} info={item} startDate={props.startDate} endDate={props.endDate}/>
     ));
 
     return (
@@ -106,73 +106,75 @@ const ScreeningList = (props) => {
   }
 };
 
+function ScreeningsTabs(props) {
+  const [key, setKey] = useState(2);
+
+  const days = [];
+
+  for (let i = -2; i < 2; i++) {
+    const startDate = new Date();
+    startDate.setHours(0, 0, 0, 0);
+    startDate.setDate(startDate.getDate() + i * 7);
+
+    const endDate = new Date();
+    endDate.setHours(0, 0, 0, 0);
+    endDate.setDate(endDate.getDate() + i * 7 + 7);
+
+    days.push({
+      startDate: startDate,
+      endDate: endDate,
+    });
+  }
+
+  const TabsFormedList = days.map((date, index) => (
+    <Tab
+      key={index}
+      eventKey={index}
+      className="text-secondary"
+      title={date.startDate.toLocaleDateString("en-UK", {
+        day: "numeric",
+        month: "2-digit",
+      })}
+    ></Tab>
+  ));
+
+  return (
+    <>
+      <div className="d-flex pb-2">
+        <div className="flex-grow-1"></div>
+
+        <div>
+          <ScreeningCreateModal
+            startDate={days[key].startDate.toISOString()}
+            endDate={days[key].endDate.toISOString()}
+          />
+        </div>
+      </div>
+
+      <Tabs
+        id="controlled-tab-example"
+        activeKey={key}
+        onSelect={(k) => setKey(k)}
+        className="mb-3 "
+      >
+        {TabsFormedList}
+      </Tabs>
+
+      <ScreeningList
+        startDate={days[key].startDate.toISOString()}
+        endDate={days[key].endDate.toISOString()}
+      />
+    </>
+  );
+}
+
 // main app function
 export default function Main() {
-  const [startDate, setStartDate] = useState(() => {
-    let date = new Date();
-    date.setHours(0, 0, 0, 0);
-    return date;
-  });
-
-  const [endDate, setEndDate] = useState(() => {
-    let date = new Date();
-    date.setHours(0, 0, 0, 0);
-    date.setDate(date.getDate() + 7);
-    return date;
-  });
-
-  const setWeek = (weeks) => {
-    let start = new Date();
-    start.setHours(0, 0, 0, 0);
-    start.setDate(start.getDate() + weeks * 7);
-
-    let end = new Date();
-    end.setHours(0, 0, 0, 0);
-    end.setDate(end.getDate() + weeks * 7 + 7);
-
-    setStartDate(start);
-    setEndDate(end);
-  };
-
-  const setPast = () => {
-    setWeek(-2)
-  }
-
-  const setPrevious = () => {
-    setWeek(-1)
-  }
-
-  const setPresent = () => {
-    setWeek(0)
-  }
-
-  const setNext = () => {
-    setWeek(1)
-  }
-
-  const setFuture = () => {
-    setWeek(2)
-  }
-
   return (
     <Layout title="Admin Settings" active="settings">
       <SettingsNavbar active="screening" />
 
-      <div className="d-flex pb-2">
-        <div className="flex-grow-1">
-
-            <Button onClick={setPast} variant="secondary" className="me-1">Past</Button>
-            <Button onClick={setPrevious} variant="secondary" className="me-1">Previous</Button>
-            <Button onClick={setPresent} variant="secondary" className="me-1">Present</Button>
-            <Button onClick={setNext} variant="secondary" className="me-1">Next</Button>
-        </div>
-
-        <div>
-          <ScreeningCreateModal />
-        </div>
-      </div>
-
-      <ScreeningList startDate={startDate} endDate={endDate} />
+      <ScreeningsTabs />
     </Layout>
   );
 }

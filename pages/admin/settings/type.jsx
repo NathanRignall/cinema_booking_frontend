@@ -22,11 +22,11 @@ const Type = (props) => {
         <td>£{props.info.price / 100}</td>
         <td>
           <div className="d-flex justify-content-end">
-            <div className="me-1">
+            {/* <div className="me-1">
               <Button variant="warning" size="sm">
                 Edit
               </Button>
-            </div>
+            </div> */}
 
             <div className="me-1">
               <Delete

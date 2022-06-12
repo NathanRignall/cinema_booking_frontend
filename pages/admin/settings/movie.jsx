@@ -28,11 +28,11 @@ const Movie = (props) => {
               </Button>
             </div> */}
 
-            <div className="me-1">
+            {/* <div className="me-1">
               <Button variant="warning" size="sm">
                 Edit
               </Button>
-            </div>
+            </div> */}
 
             <div className="me-1">
               <Delete

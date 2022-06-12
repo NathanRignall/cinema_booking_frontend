@@ -17,8 +17,8 @@ const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screening";
 
 // form schema
 const schemaCreate = yup.object().shape({
-  movieId: yup.string().required(),
-  screenId: yup.string().required(),
+  movieId: yup.string().required("Select Movie"),
+  screenId: yup.string().required("Select Screen"),
 });
 
 // movie selector component
@@ -243,7 +243,7 @@ export const ScreeningCreateModal = (props) => {
         // set the server state to handle errors
         handleServerResponse(false, false, response.data.message);
         // reload the screening list
-        mutate(SCREENING_URI);
+        mutate(`${SCREENING_URI}?start=${props.startDate}&end=${props.endDate}`);
         // close the modal
         handleClose();
       })
@@ -312,7 +312,7 @@ export const ScreeningCreateModal = (props) => {
                 <Form.Group controlId="validationFormik01">
                   <MovieSelector name="movieId" />
 
-                  {errors.moveId}
+                  {errors.movieId}
                 </Form.Group>
 
                 <br />

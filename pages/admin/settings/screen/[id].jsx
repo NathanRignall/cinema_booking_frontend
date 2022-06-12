@@ -27,45 +27,45 @@ const Screening = (props) => {
       <td>{props.movie.title}</td>
       <td>{dateString}</td>
       <td>
-          <div className="d-flex justify-content-end">
-            <div className="me-1">
-              <Link href={`/admin/settings/screening/${props.id}`} passHref>
-                <Button variant="primary" size="sm">
-                  View
-                </Button>
-              </Link>
-            </div>
-
-            <div className="me-1">
-              <Button variant="warning" size="sm">
-                Edit
+        <div className="d-flex justify-content-end">
+          <div className="me-1">
+            <Link href={`/admin/settings/screening/${props.id}`} passHref>
+              <Button variant="primary" size="sm">
+                View
               </Button>
-            </div>
-
-            <div className="me-1">
-              <Delete
-                url={`${SCREENING_URI}/${props.id}`}
-                mutate_url={SCREENING_URI}
-                message="Delete"
-                name={`${props.movie.title} Screening`}
-                size="sm"
-              />
-            </div>
+            </Link>
           </div>
-        </td>
+
+          {/* <div className="me-1">
+            <Button variant="warning" size="sm">
+              Edit
+            </Button>
+          </div> */}
+
+          <div className="me-1">
+            <Delete
+              url={`${SCREENING_URI}/${props.id}`}
+              mutate_url={`${SCREENING_URI}/find?start=${props.startDate}&end=${props.endDate}&screen${props.screen}`}
+              message="Delete"
+              name={`${props.movie.title} Screening`}
+              size="sm"
+            />
+          </div>
+        </div>
+      </td>
     </tr>
   );
 };
 
 const Screenings = (props) => {
   const { data, error } = useSWR(
-    `${SCREENING_URI}/find?date=${props.date}&screen=${props.screen}`,
+    `${SCREENING_URI}/find?start=${props.startDate}&end=${props.endDate}&screen${props.screen}`,
     fetcher
   );
 
   if (data) {
     const ScreeningsFormedList = data.payload.map((screening) => (
-      <Screening key={screening.id} {...screening} />
+      <Screening key={screening.id} {...screening} screen={props.screen} startDate={props.startDate} endDate={props.endDate}/>
     ));
 
     return (
@@ -98,25 +98,32 @@ const Screenings = (props) => {
 };
 
 function ScreeningsTabs(props) {
-  const [key, setKey] = useState(0);
+  const [key, setKey] = useState(2);
 
   const days = [];
 
-  for (let i = 0; i < 14; i++) {
-    var date = new Date();
-    date.setHours(0, 0, 0, 0);
-    date.setDate(date.getDate() + i);
+  for (let i = -2; i < 2; i++) {
+    const startDate = new Date();
+    startDate.setHours(0, 0, 0, 0);
+    startDate.setDate(startDate.getDate() + i * 7);
 
-    days.push(date);
+    const endDate = new Date();
+    endDate.setHours(0, 0, 0, 0);
+    endDate.setDate(endDate.getDate() + i * 7 + 7);
+
+    days.push({
+      startDate: startDate,
+      endDate: endDate,
+    });
   }
 
   const TabsFormedList = days.map((date, index) => (
     <Tab
       key={index}
       eventKey={index}
-      title={date.toLocaleDateString("en-UK", {
-        month: "2-digit",
+      title={date.startDate.toLocaleDateString("en-UK", {
         day: "numeric",
+        month: "2-digit",
       })}
     ></Tab>
   ));
@@ -132,7 +139,11 @@ function ScreeningsTabs(props) {
         {TabsFormedList}
       </Tabs>
 
-      <Screenings date={days[key].toISOString()} screen={props.id} />
+      <Screenings
+        startDate={days[key].startDate.toISOString()}
+        endDate={days[key].endDate.toISOString()}
+        screen={props.id}
+      />
     </>
   );
 }
@@ -140,7 +151,7 @@ function ScreeningsTabs(props) {
 // main list loader
 const Screen = (props) => {
   const router = useRouter();
-  
+
   const { data, error } = useSWR(`${SCREEN_URI}/${props.id}`, fetcher);
 
   // check if data has loaded yet
@@ -151,8 +162,6 @@ const Screen = (props) => {
     return (
       <>
         <h1 className="pt-4 mb-2 border-bottom">
-         
-
           <div className="d-flex">
             <div className="flex-grow-1"> {data.payload.name}</div>{" "}
             <div>
@@ -169,9 +178,9 @@ const Screen = (props) => {
         </h1>
 
         <div>
-          <div className="me-2 d-inline">
+          {/* <div className="me-2 d-inline">
             <Button variant="warning">Edit</Button>
-          </div>
+          </div> */}
 
           <div className="me-2 d-inline">
             <Delete
@@ -179,7 +188,7 @@ const Screen = (props) => {
               mutate_url={SCREEN_URI}
               message="Delete"
               name={data.payload.name}
-              redirect={"/admin/screen"}
+              redirect={"/admin/settings/screen"}
             />
           </div>
 
@@ -204,7 +213,7 @@ const Screen = (props) => {
         />
 
         <h3>Screenings</h3>
-        <ScreeningsTabs id={data.payload.id}/>
+        <ScreeningsTabs id={data.payload.id} />
 
         <ErrorDisplayer error={error} />
       </>

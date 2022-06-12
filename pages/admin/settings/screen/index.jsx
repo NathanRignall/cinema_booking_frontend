@@ -5,6 +5,7 @@ import useSWR from "swr";
 
 import { fetcher } from "../../../../components/common/functions";
 import { ErrorDisplayer } from "../../../../components/widgets/basic";
+import { Delete } from "../../../../components/widgets/managers/shared";
 import { ScreenCreateModal } from "../../../../components/widgets/managers/screen";
 import SettingsNavbar from "../../../../components/widgets/SettingsNavbar";
 
@@ -30,16 +31,20 @@ const Screen = (props) => {
               </Link>
             </div>
 
-            <div className="me-1">
+            {/* <div className="me-1">
               <Button variant="warning" size="sm">
                 Edit
               </Button>
-            </div>
+            </div> */}
 
             <div className="me-1">
-              <Button variant="danger" size="sm">
-                Delete
-              </Button>
+            <Delete
+                url={`${SCREEN_URI}/${props.info.id}`}
+                mutate_url={SCREEN_URI}
+                message="Delete"
+                name={`${props.info.name}`}
+                size="sm"
+              />
             </div>
           </div>
         </td>

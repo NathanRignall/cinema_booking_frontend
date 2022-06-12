@@ -112,7 +112,7 @@ export const MovieCreateModal = (props) => {
           initialValues={{
             title: "",
             description: "",
-            duration: 0,
+            duration: "",
           }}
           onSubmit={handleOnSubmit}
         >
@@ -139,6 +139,8 @@ export const MovieCreateModal = (props) => {
                   </Form.Control.Feedback>
                 </Form.Group>
 
+                <br />
+
                 {/* description group */}
                 <Form.Group controlId="validationFormik02">
                   <Form.Control
@@ -154,6 +156,8 @@ export const MovieCreateModal = (props) => {
                     {errors.description}
                   </Form.Control.Feedback>
                 </Form.Group>
+
+                <br />
 
                 {/* duration group */}
                 <Form.Group controlId="validationFormik03">

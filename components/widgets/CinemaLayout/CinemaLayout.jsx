@@ -15,6 +15,7 @@ import { Card, Button, Modal } from "react-bootstrap";
 
 // axios request urls
 const SCREEN_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screen";
+const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screening";
 const SEAT_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/seat";
 
 const ReactGridLayout = WidthProvider(RGL);
@@ -498,6 +499,7 @@ export default class CinemaLayout extends React.PureComponent {
                 screeningId={this.props.screeningId}
                 seatIds={this.state.selected}
                 disabled={this.state.selected.length == 0}
+                mutate_url={`${SCREENING_URI}/${this.props.id}`}
               />
             </div>
           ) : null}

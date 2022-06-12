@@ -111,7 +111,7 @@ export const TypeCreateModal = (props) => {
           validationSchema={schemaCreate}
           initialValues={{
             name: "",
-            price: 0,
+            price: "",
           }}
           onSubmit={handleOnSubmit}
         >
@@ -163,7 +163,7 @@ export const TypeCreateModal = (props) => {
                   <Form.Control
                     type="text"
                     name="price"
-                    placeholder="Enter Price Pounds"
+                    placeholder="Enter Price (Pence)"
                     value={values.price}
                     onChange={handleChange}
                     isInvalid={errors.price}
