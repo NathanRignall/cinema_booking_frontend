@@ -1,6 +1,6 @@
 import Layout from "../components/layouts/basic";
 
-import LoginForm from "../components/widgets/loginForm";
+import RegisterForm from "../components/widgets/registerForm";
 
 import { Button } from "react-bootstrap";
 
@@ -15,7 +15,7 @@ export default function Main() {
           </div>
 
           {/* Load the form component */}
-          {/* <LoginForm employee={false} /> */}
+          <RegisterForm  />
         </div>
       </main>
     </Layout>
