@@ -33,6 +33,7 @@ const Movie = (props) => {
     </Col>
   );
 };
+
 // main list loader
 const MovieList = (props) => {
   const { data, error } = useSWR(MOVIE_URI, fetcher);
@@ -68,7 +69,7 @@ const MovieList = (props) => {
 // main app function
 export default function Main() {
   return (
-    <Layout title="Home" active="movie">
+    <Layout title="Movies" active="movie">
       
 
       <br />

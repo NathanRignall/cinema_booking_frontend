@@ -21,10 +21,11 @@ const stripePromise = loadStripe(
 const MOVIE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/movie";
 const SCREEN_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screen";
 const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screening";
-const PURCHASE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/purchase";
+const PURCHASE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/purchase/force";
 const TYPE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/type";
 const PROFILE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/profile";
 const PURCHASE_USER_URI = process.env.NEXT_PUBLIC_API_URL + "/purchase";
+const PURCHASE_ADMIN_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/purchase";
 
 // create schema
 const schemaCreate = yup.object().shape({
@@ -140,7 +141,7 @@ export const PurchaseUserCreateModal = (props) => {
 
     // axios post create
     axios
-      .post(PURCHASE_USER_URI, json, {
+      .post(props.stripe ? PURCHASE_USER_URI : PURCHASE_ADMIN_URI, json, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
       })
@@ -148,12 +149,15 @@ export const PurchaseUserCreateModal = (props) => {
         // set the server state to handle errors
         handleServerResponse(false, false, response.data.message);
         //
-        const stripe = await stripePromise;
 
-        console.log(response.data.payload)
+        if (props.stripe) {
+          const stripe = await stripePromise;
+          stripe.redirectToCheckout({
+            sessionId: response.data.payload.sessionId,
+          });
+        }
 
-        stripe.redirectToCheckout({ sessionId: response.data.payload.sessionId });
-
+        console.log(props.mutate_url);
         // reload url
         mutate(props.mutate_url);
         // close the modal

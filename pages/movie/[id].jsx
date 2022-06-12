@@ -192,7 +192,7 @@ export default function Main() {
   const { id } = router.query;
 
   return (
-    <Layout title="Admin Settings" active="settings">
+    <Layout title="Movies" active="movie">
       {id != undefined ? <Movie id={id} /> : null}
     </Layout>
   );

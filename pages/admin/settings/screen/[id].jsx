@@ -45,7 +45,7 @@ const Screening = (props) => {
           <div className="me-1">
             <Delete
               url={`${SCREENING_URI}/${props.id}`}
-              mutate_url={`${SCREENING_URI}/find?start=${props.startDate}&end=${props.endDate}&screen${props.screen}`}
+              mutate_url={`${SCREENING_URI}/find?start=${props.startDate}&end=${props.endDate}&screen=${props.screen}`}
               message="Delete"
               name={`${props.movie.title} Screening`}
               size="sm"
@@ -59,7 +59,7 @@ const Screening = (props) => {
 
 const Screenings = (props) => {
   const { data, error } = useSWR(
-    `${SCREENING_URI}/find?start=${props.startDate}&end=${props.endDate}&screen${props.screen}`,
+    `${SCREENING_URI}/find?start=${props.startDate}&end=${props.endDate}&screen=${props.screen}`,
     fetcher
   );
 

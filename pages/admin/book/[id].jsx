@@ -1,18 +1,18 @@
-import Layout from "../../components/layouts/user";
+import Layout from "../../../components/layouts/employee";
 
 import React, { useState, useEffect} from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 
-import { fetcher } from "../../components/common/functions";
-import { ErrorDisplayer } from "../../components/widgets/basic";
-import CinemaLayout from "../../components/widgets/CinemaLayout";
+import { fetcher } from "../../../components/common/functions";
+import { ErrorDisplayer } from "../../../components/widgets/basic";
+import CinemaLayout from "../../../components/widgets/CinemaLayout";
 
 import { Spinner, Button } from "react-bootstrap";
 
 // axios request urls
-const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/screening";
-const PROFILE_URI = process.env.NEXT_PUBLIC_API_URL + "/profile";
+const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screening";
+const PROFILE_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/profile";
 
 // main screening loader
 const Screening = (props) => {
@@ -24,6 +24,8 @@ const Screening = (props) => {
   if (data) {
     const date = new Date(data.payload.time);
     const dateString = date.toLocaleString();
+
+    console.log(props.profiles)
 
     return (
       <>
@@ -50,7 +52,6 @@ const Screening = (props) => {
           reservable={true}
           purchase={false}
           profiles={props.profiles}
-          stripe={true}
         />
 
         <br />
@@ -88,7 +89,7 @@ export default function Main() {
   }, [data]);
 
   return (
-    <Layout title="Movies" active="movie">
+    <Layout title="Screening" active="screening">
       {id != undefined ? (
         <Screening id={id} router={router} profiles={profiles} />
       ) : null}

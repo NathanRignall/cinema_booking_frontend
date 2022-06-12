@@ -40,19 +40,19 @@ const Navbar = (props) => {
                 </Link>
               </Nav.Item>
               <Nav.Item>
-                <Link href="/info" passHref>
+                <Link href="/account" passHref>
                   <Nav.Link
                     className={
-                      props.active == "info" ? "text-secondary" : "text-black"
+                      props.active == "account" ? "text-secondary" : "text-black"
                     }
                   >
-                    Info
+                    Account
                   </Nav.Link>
                 </Link>
               </Nav.Item>
-              <Link href="/account" passHref>
+              {/* <Link href="/account" passHref>
                 <Button variant="outline-dark ms-2">Account</Button>
-              </Link>
+              </Link> */}
             </Nav>
           </div>
         </div>

@@ -36,7 +36,7 @@ const Layout = (props) => {
       return (
         <AppWrapper data={data.payload}>
           <div>
-            <Navbar />
+            <Navbar active={props.active}/>
             <Container>{props.children}</Container>
           </div>
         </AppWrapper>
