@@ -47,7 +47,7 @@ const Test = (props) => {
 // main app function
 export default function Main() {
   return (
-    <Layout title="Movies" active="movie">
+    <Layout title="Validate" active="validate">
       <h1 className="pt-4  mb-2 border-bottom">
         <div className="d-flex mb-2">
           <div className="flex-grow-1">Validate Ticket</div>

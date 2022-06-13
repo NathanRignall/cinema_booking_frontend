@@ -88,7 +88,7 @@ export default function Main() {
   const { id } = router.query;
 
   return (
-    <Layout title="Account" active="account">
+    <Layout title="Validate" active="validate">
       {id != undefined ? <Ticket id={id} router={router} /> : null}
     </Layout>
   );
