@@ -6,7 +6,7 @@ import Link from "next/link";
 import { fetcher } from "../../components/common/functions";
 import { ErrorDisplayer } from "../../components/widgets/basic";
 
-import { Spinner, Card, Col, Row, Nav, Button} from "react-bootstrap";
+import { Spinner, Card, Col, Row, Nav, Button } from "react-bootstrap";
 
 // axios request urls
 const MOVIE_URI = process.env.NEXT_PUBLIC_API_URL + "/movie";
@@ -23,10 +23,8 @@ const Movie = (props) => {
         <Card.Body>
           <Card.Title>{props.info.title}</Card.Title>
           <Link href={`/movie/${props.info.id}`} passHref>
-                <Button variant="outline-dark">
-                View Screenings
-                </Button>
-              </Link>
+            <Button variant="outline-dark">View Screenings</Button>
+          </Link>
         </Card.Body>
       </Card>
       <br />
@@ -70,8 +68,6 @@ const MovieList = (props) => {
 export default function Main() {
   return (
     <Layout title="Movies" active="movie">
-      
-
       <br />
       <MovieList />
     </Layout>

@@ -22,12 +22,13 @@ const UserDetails = (props) => {
     <>
       <h1 className="pt-2 mb-2 border-bottom">
         <div className="d-flex">
-          <div className="flex-grow-1">{context.firstName} {context.lastName}</div> <div></div>
+          <div className="flex-grow-1">
+            {context.firstName} {context.lastName}
+          </div>{" "}
+          <div></div>
         </div>
 
-        <p className="lead mb-2">
-        {context.email}
-        </p>
+        <p className="lead mb-2">{context.email}</p>
       </h1>
     </>
   );
@@ -35,12 +36,54 @@ const UserDetails = (props) => {
 
 // purchase Card
 const Purchae = (props) => {
+  const date = new Date(props.info.screening.time);
+  const dateString = date.toLocaleString();
+
   return (
     <Col>
       <Card>
+        <Card.Header className="bg-dark text-white">
+          <h3 className=" mb-2 ">
+            <div>{props.info.screening.movie.title}</div>
+            <p className="lead mb-2">
+              {props.info.screening.screen.name} - {dateString}
+            </p>
+          </h3>
+        </Card.Header>
         <Card.Body>
-          <Card.Title>{props.info.cost}</Card.Title>
+          <Card.Title></Card.Title>
 
+          {props.info.reservations.map((item, index) => {
+            return (
+              <div key={index}>
+                <h3 className=" mb-2 border-bottom">
+                  <div className="d-flex">
+                    <div className="flex-grow-1">Seat - {item.seatName}</div>
+                    <div>£{(item.price / 100).toFixed(2)}</div>
+                  </div>
+                  <p className="lead mb-2">
+                    {item.typeName} - {item.profileName}
+                  </p>
+                </h3>
+              </div>
+            );
+          })}
+
+          <div>
+            <h3 className=" pt-2 mb-2 ">
+              <div className="d-flex">
+                <div className="flex-grow-1">Total</div>
+                <div>£{(props.info.cost / 100).toFixed(2)}</div>
+              </div>
+            </h3>
+          </div>
+
+          <br />
+          <Link href={`/ticket/${props.info.id}`} passHref>
+            <Button variant="outline-dark" className="w-100" size="lg">
+              View Ticket
+            </Button>
+          </Link>
         </Card.Body>
       </Card>
       <br />
@@ -60,9 +103,7 @@ const PurchaeList = (props) => {
 
     return (
       <>
-
-          {FormedList}
-
+        {FormedList}
 
         <ErrorDisplayer error={error} />
       </>
@@ -85,7 +126,7 @@ export default function Main() {
   return (
     <Layout title="Account" active="account">
       <UserDetails />
-      <PurchaeList/>
+      <PurchaeList />
     </Layout>
   );
 }

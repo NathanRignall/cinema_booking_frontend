@@ -11,13 +11,13 @@ export default function EmployeeNavbar(props) {
   return (
     <Navbar
       collapseOnSelect
-      expand="lg"
+      expand="md"
       bg="dark"
       variant="dark"
       className="px-5"
     >
       <Link href="/" passHref>
-        <Navbar.Brand>XL Cinima</Navbar.Brand>
+        <Navbar.Brand>XL Cinema</Navbar.Brand>
       </Link>
 
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
