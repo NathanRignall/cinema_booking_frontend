@@ -231,6 +231,21 @@ const movieDecode = (data, title) => {
   return array;
 };
 
+const movieScreenDecode = (data, title, name) => {
+  const array = [];
+
+  data.map((record) => {
+    if (record.movie.title == title && record.movie.name == name) {
+      array.push({
+        x: record.date,
+        y: record.count,
+      });
+    }
+  });
+
+  return array;
+};
+
 //
 const MainGraph = (props) => {
   const { data, error } = useSWR(
