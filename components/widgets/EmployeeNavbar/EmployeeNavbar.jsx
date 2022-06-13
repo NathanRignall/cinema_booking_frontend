@@ -28,7 +28,7 @@ export default function EmployeeNavbar(props) {
             <Nav.Link active={props.active == "admin"}>Home</Nav.Link>
           </Link>
 
-          <Link href="/admin/settings/validate" passHref>
+          <Link href="/admin/validate" passHref>
             <Nav.Link active={props.active == "validate"}>Validate</Nav.Link>
           </Link>
 

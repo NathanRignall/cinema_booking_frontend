@@ -27,10 +27,27 @@ const Ticket = (props) => {
 
     return (
       <>
-        <br/>
+        <br />
+
+        <h1 className="pt-2 mb-2 border-bottom">
+          <div className="d-flex">
+            <div className="flex-grow-1  mb-2">Validate Ticket</div>
+            <div>
+              <Button onClick={() => router.back()} variant="secondary">
+                Back
+              </Button>
+            </div>
+          </div>
+        </h1>
 
         <Card>
-          <Card.Header className={data.payload.paid ? "bg-success text-white" :  "bg-danger text-white"}>
+          <Card.Header
+            className={
+              data.payload.paid
+                ? "bg-success text-white"
+                : "bg-danger text-white"
+            }
+          >
             <h3 className=" mb-2 ">
               <div>{data.payload.screening.movie.title}</div>
               <p className="lead mb-2">
