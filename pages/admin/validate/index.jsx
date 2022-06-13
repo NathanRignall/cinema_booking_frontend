@@ -19,8 +19,8 @@ const Test = (props) => {
   useEffect(() => {
     if (data.length == 36) {
       router.push({
-        pathname: "/post/[pid]",
-        query: { pid: post.id },
+        pathname: "/admin/settings/validate/[id]",
+        query: { id: data },
       });
     }
   }, [data]);
