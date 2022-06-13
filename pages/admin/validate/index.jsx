@@ -19,7 +19,7 @@ const Test = (props) => {
   useEffect(() => {
     if (data.length == 36) {
       router.push({
-        pathname: "/admin/settings/validate/[id]",
+        pathname: "/admin/validate/[id]",
         query: { id: data },
       });
     }

@@ -27,8 +27,10 @@ const Ticket = (props) => {
 
     return (
       <>
+        <br/>
+
         <Card>
-          <Card.Header className={data.payload.paid ? "bg-success text-white" :  "bg-dark text-white"}>
+          <Card.Header className={data.payload.paid ? "bg-success text-white" :  "bg-danger text-white"}>
             <h3 className=" mb-2 ">
               <div>{data.payload.screening.movie.title}</div>
               <p className="lead mb-2">
