@@ -3,6 +3,8 @@ import Layout from "../../../components/layouts/employee";
 import { useState, useEffect } from "react";
 import useSWR from "swr";
 
+import { Formik, useField, useFormikContext } from "formik";
+import * as yup from "yup";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
 import axios from "axios";
 
@@ -18,7 +20,9 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import "chartjs-adapter-date-fns";
-import { enGB } from 'date-fns/locale';
+import { enGB } from "date-fns/locale";
+
+import { Form, Button, Spinner, Modal, Alert } from "react-bootstrap";
 
 ChartJS.register(
   CategoryScale,
@@ -32,8 +36,6 @@ ChartJS.register(
 
 import { fetcher } from "../../../components/common/functions";
 import { ErrorDisplayer } from "../../../components/widgets/basic";
-
-import { Form, Spinner } from "react-bootstrap";
 
 // axios request urls
 const SCREENING_URI = process.env.NEXT_PUBLIC_API_URL + "/admin/screening";
@@ -49,16 +51,14 @@ const MovieSelector = (props) => {
 
   // if a single item is selected set the formik status
   useEffect(() => {
-    if (singleSelections.length > 0) {
-      console.log(singleSelections);
-    }
+    props.set(singleSelections);
   }, [singleSelections]);
 
   // main feild searcher
   const handleSearch = (query) => {
     // make the axios request for search
     axios
-      .get(`${MOVIE_URI}/find?find=${query}`, {
+      .get(`${MOVIE_URI}/find?title=${query}`, {
         withCredentials: true,
         headers: { "Content-Type": "application/json" },
       })
@@ -119,9 +119,7 @@ const ScreenSelector = (props) => {
 
   // if a single item is selected set the formik status
   useEffect(() => {
-    if (singleSelections.length > 0) {
-      console.log(singleSelections);
-    }
+    props.set(singleSelections);
   }, [singleSelections]);
 
   // main feild searcher
@@ -180,28 +178,10 @@ const ScreenSelector = (props) => {
   );
 };
 
-const data2 = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
-  datasets: [
-    {
-      label: "Dataset 1",
-      data: [2, 5, 7, 3, 8, 5, 9],
-      borderColor: "rgb(255, 99, 132)",
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-    {
-      label: "Dataset 2",
-      data: [4, 6, 2, 3, 5, 2, 1],
-      borderColor: "rgb(53, 162, 235)",
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
-    },
-  ],
-};
-
 const options = {
   scales: {
     y: {
-      title: { display: true, text: "Weight in lbs" },
+      title: { display: true, text: "Seats Filled" },
     },
     x: {
       adapters: {
@@ -221,38 +201,117 @@ const options = {
   },
 };
 
-// test loader
-const StatsTest = (props) => {
+const screenDecode = (data, name) => {
+  const array = [];
+
+  data.map((record) => {
+    if (record.screen.name == name) {
+      array.push({
+        x: record.date,
+        y: record.count,
+      });
+    }
+  });
+
+  return array;
+};
+
+const movieDecode = (data, title) => {
+  const array = [];
+
+  data.map((record) => {
+    if (record.movie.title == title) {
+      array.push({
+        x: record.date,
+        y: record.count,
+      });
+    }
+  });
+
+  return array;
+};
+
+//
+const MainGraph = (props) => {
   const { data, error } = useSWR(
-    `${SCREENING_URI}/stats?occupied=true`,
+    `${SCREENING_URI}/stats?occupied=true${props.query}`,
     fetcher
   );
 
   // check if data has loaded yet
   if (data) {
+    const datasets = [];
 
-    const chat_data = {
-        datasets: [
-          {
-            label: "Seats Filled",
-            data: data.payload.map((record) => {
-              return {
-                x: record.date,
-                y: record.occupiedSeats
-              }
-            }),
-            borderColor: "rgb(53, 162, 235)",
-            backgroundColor: "rgba(53, 162, 235, 0.5)",
-          }
-        ]
+    if (props.screenSelections.length > 1 && props.movieSelections.length > 1) {
+      
     }
 
-    console.log(chat_data);
+    if (props.screenSelections.length > 1) {
+      props.screenSelections.map((item) => {
+        console.log(item);
+        datasets.push({
+          label: item.name,
+          data: screenDecode(data.payload, item.name),
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.5)",
+        });
+      });
+    } else if (props.screenSelections.length == 1){
+      datasets.push({
+        label: props.screenSelections[0].name,
+        data: data.payload.map((record) => {
+          return {
+            x: record.date,
+            y: record.count,
+          };
+        }),
+        borderColor: "rgb(53, 162, 235)",
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
+      });
+    }
+
+    if (props.movieSelections.length > 1) {
+      props.movieSelections.map((item) => {
+        datasets.push({
+          label: item.title,
+          data: movieDecode(data.payload, item.title),
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.5)",
+        });
+      });
+    } else if (props.movieSelections.length == 1 & props.screenSelections.length == 0) {
+      datasets.push({
+        label: props.movieSelections[0].title,
+        data: data.payload.map((record) => {
+          return {
+            x: record.date,
+            y: record.count,
+          };
+        }),
+        borderColor: "rgb(53, 162, 235)",
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
+      });
+    }
+
+    const chat_data = {
+      // datasets: [
+      //   {
+      //     label: "Seats Filled",
+      //     data: data.payload.map((record) => {
+      //       return {
+      //         x: record.date,
+      //         y: record.count,
+      //       };
+      //     }),
+      //     borderColor: "rgb(53, 162, 235)",
+      //     backgroundColor: "rgba(53, 162, 235, 0.5)",
+      //   },
+      // ],
+      datasets: datasets,
+    };
 
     return (
       <>
-        <MovieSelector name="movieId" />
-        <ScreenSelector name="screenId" />
         <Line options={options} data={chat_data} />
         <ErrorDisplayer error={error} />
       </>
@@ -267,6 +326,54 @@ const StatsTest = (props) => {
       </>
     );
   }
+};
+
+// test loader
+const StatsTest = (props) => {
+  const [movieSelections, setMovieSelections] = useState([]);
+  const [screenSelections, setScreenSelections] = useState([]);
+
+  const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    let query1 = "";
+    movieSelections.map((item) => {
+      query1 = `${query1}&movieId=${item.id}`;
+    });
+
+    console.log(query1);
+
+    let query2 = "";
+    screenSelections.map((item) => {
+      query2 = `${query2}&screenId=${item.id}`;
+    });
+
+    console.log(query2);
+
+    setQuery(query1 + query2);
+  }, [movieSelections, screenSelections]);
+
+  useEffect(() => {
+    console.log(query);
+  }, [query]);
+
+  return (
+    <>
+      <MovieSelector set={setMovieSelections} name="movieId" />
+
+      <br />
+
+      <ScreenSelector set={setScreenSelections} name="screenId" />
+
+      <br />
+
+      <MainGraph
+        query={query}
+        movieSelections={movieSelections}
+        screenSelections={screenSelections}
+      />
+    </>
+  );
 };
 
 // main app function

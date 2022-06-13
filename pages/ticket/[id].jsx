@@ -46,7 +46,7 @@ const Ticket = (props) => {
         </h1>
 
         <div className="d-flex justify-content-center pt-4">
-          <QRCode value={data.payload.screening.time} />
+          <QRCode value={props.id} />
         </div>
       </>
     );
