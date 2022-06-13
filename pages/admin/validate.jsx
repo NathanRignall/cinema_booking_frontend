@@ -17,6 +17,7 @@ const Test = (props) => {
           }
         }}
         style={{ width: '100%' }}
+        constraints={{facingMode: { exact: "environment" }} }
       />
       <p>{data}</p>
     </>
