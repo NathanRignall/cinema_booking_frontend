@@ -25,7 +25,7 @@ export default function EmployeeNavbar(props) {
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="me-auto">
           <Link href="/admin" passHref>
-            <Nav.Link active={props.active == "admin"}>Home</Nav.Link>
+            <Nav.Link active={props.active == "movie"}>Home</Nav.Link>
           </Link>
 
           <Link href="/admin/validate" passHref>
@@ -40,6 +40,10 @@ export default function EmployeeNavbar(props) {
             <Nav.Link active={props.active == "statistics"}>
               Statistics
             </Nav.Link>
+          </Link>
+
+          <Link href="/admin/guide" passHref>
+            <Nav.Link active={props.active == "guide"}>Guides</Nav.Link>
           </Link>
         </Nav>
 

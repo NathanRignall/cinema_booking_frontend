@@ -24,7 +24,12 @@ const UserDetails = (props) => {
         <div className="d-flex">
           <div className="flex-grow-1">
             {context.firstName} {context.lastName}
-          </div>{" "}
+          </div>
+          <div>
+            <Link href="/logout" passHref>
+              <Button variant="secondary">Logout</Button>
+            </Link>
+          </div>
           <div></div>
         </div>
 
@@ -126,6 +131,7 @@ export default function Main() {
   return (
     <Layout title="Account" active="account">
       <UserDetails />
+      <br/>
       <PurchaeList />
     </Layout>
   );

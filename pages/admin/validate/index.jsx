@@ -26,7 +26,7 @@ const Test = (props) => {
   }, [data]);
 
   return (
-    <>
+    <div style={{maxHeight: "70vh"}}>
       <QrReader
         onResult={(result, error) => {
           if (!!result) {
@@ -39,8 +39,9 @@ const Test = (props) => {
         }}
         style={{ width: "100%" }}
         constraints={{ facingMode: { exact: "environment" } }}
+        containerStyle={{maxHeight: "70vh"}}
       />
-    </>
+    </div>
   );
 };
 
